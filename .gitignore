@@ -1,0 +1,11 @@
+.DS_Store
+/node_modules/
+
+.tanstack
+dist
+dist-ssr
+count.txt
+*.local
+
+.idea
+.vscode

@@ -1,0 +1,10 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["oxc", "import", "unicorn", "typescript", "react", "react-perf"],
+  "env": {
+    "browser": true
+  },
+  "settings": {},
+  "rules": {},
+  "ignorePatterns": ["dist/", "node_modules/", "coverage/", ".vscode/", ".idea/", ".git/"]
+}
