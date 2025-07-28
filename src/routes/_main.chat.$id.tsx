@@ -6,7 +6,7 @@ import {
   useRouter,
 } from "@tanstack/react-router";
 import { useSize } from "ahooks";
-import clsx from "clsx";
+import { clsx } from "clsx";
 
 import { useLiveQuery } from "dexie-react-hooks";
 import { useEffect, useRef, useState } from "react";
@@ -17,6 +17,7 @@ import { Navbar } from "~/components/Navbar";
 import type { Message } from "~/utils/ai/chat";
 import { db } from "~/utils/db";
 import { useBeerSize } from "~/utils/ui-utils";
+import { FlexStringInput } from "../components/beer-input/FlexStringInput";
 
 function NotFound() {
   const router = useRouter();
@@ -77,38 +78,6 @@ function Message({ message }: { message: Message }) {
       </nav>
     ))
     .exhaustive();
-}
-
-function SwitchInput({
-  inputClass,
-  textareaClass,
-  value,
-  onChange,
-}: {
-  inputClass?: string;
-  textareaClass?: string;
-  value?: string;
-  onChange?: (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => void;
-}) {
-  const [currentType, setCurrentType] = useState<"input" | "textarea">("input");
-
-  return currentType === "input" ? (
-    <div className={clsx(inputClass, "field prefix")}>
-      <i className="front" onClick={() => setCurrentType("textarea")}>
-        fullscreen
-      </i>
-      <input type="text" value={value} onChange={onChange} />
-    </div>
-  ) : (
-    <div className={clsx(textareaClass, "field prefix textarea extra")}>
-      <i className="front" onClick={() => setCurrentType("input")}>
-        fullscreen_exit
-      </i>
-      <textarea value={value} onChange={onChange} />
-    </div>
-  );
 }
 
 function Chat() {
@@ -194,7 +163,7 @@ function Chat() {
                     size.m || size.l,
                 })}
               >
-                <SwitchInput
+                <FlexStringInput
                   inputClass="max round border surface"
                   textareaClass="max round border surface"
                   value={input}

@@ -2,6 +2,7 @@ import { javascript } from "@codemirror/lang-javascript";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import React, { useCallback, useState } from "react";
 import { v7 as uuid } from "uuid";
+import { StringInput } from "~/components/beer-input/StringInput";
 import { Gap } from "~/components/Gap";
 import { Navbar } from "~/components/Navbar";
 import { db } from "~/utils/db";
@@ -58,28 +59,21 @@ function DownloadPlugin() {
       />
       <main className="padding">
         <div className="row">
-          <div className="field label border max">
-            <input
-              type="text"
-              value={url}
-              onChange={(e) => setUrl(e.target.value)}
-            />
-            <label>链接</label>
-          </div>
+          <StringInput
+            value={url}
+            onChange={setUrl}
+            label="链接"
+            className="max"
+          />
           <button onClick={fetchContent}>获取</button>
         </div>
         <Gap h={3} />
-        <div className="field label border">
-          <input value={name} onChange={(e) => setName(e.target.value)} />
-          <label>名称</label>
-        </div>
-        <div className="field label border">
-          <input
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-          />
-          <label>描述</label>
-        </div>
+        <StringInput value={name} onChange={setName} label="名称" />
+        <StringInput
+          value={description}
+          onChange={setDescription}
+          label="描述"
+        />
         <Gap h={3} />
         <CodeMirror
           value={code}

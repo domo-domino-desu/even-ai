@@ -29,7 +29,7 @@ export const PROVIDER_INFO: Record<
 };
 const clientCache: Map<string, ProviderV2> = new Map();
 
-function createProvider(providerSettings: ProviderSettings) {
+export function createProvider(providerSettings: ProviderSettings) {
   const providerType = providerSettings.type;
   if (!SUPPORTED_PROVIDERS.includes(providerType)) {
     throw new Error(

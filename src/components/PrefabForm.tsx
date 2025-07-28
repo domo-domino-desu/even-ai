@@ -3,6 +3,7 @@ import { useForm } from "@tanstack/react-form";
 import { useNavigate } from "@tanstack/react-router";
 import { v7 as uuid } from "uuid";
 import { db, type Prefab } from "~/utils/db";
+import { StringInput } from "./beer-input/StringInput";
 
 export function usePrefabForm(prefab?: Prefab, afterSubmit?: () => void) {
   const navigate = useNavigate();
@@ -43,44 +44,27 @@ export function PrefabForm({
       <form.Field
         name="name"
         children={(field) => (
-          <div className="field label border">
-            <input
-              type="text"
-              value={field.state.value}
-              onBlur={field.handleBlur}
-              onChange={(e) => field.handleChange(e.target.value)}
-            />
-            <label>名称</label>
-          </div>
+          <StringInput
+            label="名称"
+            value={field.state.value}
+            onBlur={field.handleBlur}
+            onChange={field.handleChange}
+            disabled={form.state.isSubmitting}
+          />
         )}
       />
       <form.Field
         name="description"
         children={(field) => (
-          <div className="field label border">
-            <input
-              value={field.state.value}
-              onBlur={field.handleBlur}
-              onChange={(e) => field.handleChange(e.target.value)}
-            />
-            <label>描述</label>
-          </div>
+          <StringInput
+            label="描述"
+            value={field.state.value}
+            onBlur={field.handleBlur}
+            onChange={field.handleChange}
+            disabled={form.state.isSubmitting}
+          />
         )}
       />
-      {/* <form.Field
-        name="tags"
-        children={(field) => (
-          <div className="field label border">
-            <input
-              value={field.state.value}
-              onBlur={field.handleBlur}
-              onChange={(e) => field.handleChange(e.target.value)}
-            />
-            <label>标签</label>
-            <span className="helper">逗号分隔</span>
-          </div>
-        )}
-      /> */}
       <nav className="right-align">
         <button type="submit">{isNew ? "创建" : "保存"}</button>
       </nav>

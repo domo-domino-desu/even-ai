@@ -1,5 +1,5 @@
 import { useCanGoBack, useNavigate, useRouter } from "@tanstack/react-router";
-import clsx from "clsx";
+import { clsx } from "clsx";
 import { useBeerSize } from "~/utils/ui-utils";
 
 function getNavStyle(size: ReturnType<typeof useBeerSize>) {

@@ -1,5 +1,5 @@
 import { createFileRoute, Link, Outlet } from "@tanstack/react-router";
-import clsx from "clsx";
+import { clsx } from "clsx";
 import { useAtom } from "jotai";
 import { match } from "ts-pattern";
 

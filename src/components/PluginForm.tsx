@@ -7,6 +7,7 @@ import { v7 as uuid } from "uuid";
 import { Gap } from "~/components/Gap";
 import type { ConfigSchema } from "~/utils/ai/plugin";
 import { db, type PluginInfo } from "~/utils/db";
+import { StringInput } from "./beer-input/StringInput";
 
 const CodeMirror = React.lazy(() => import("@uiw/react-codemirror"));
 
@@ -61,13 +62,13 @@ export function usePluginForm<TSchema extends ConfigSchema>(
   return { form, code, onCodeChange };
 }
 
-export function PluginForm({
+export function PluginForm<TSchema extends ConfigSchema>({
   form,
   isNew,
   code,
   onCodeChange,
 }: {
-  form: ReturnType<typeof usePluginForm>["form"];
+  form: ReturnType<typeof usePluginForm<TSchema>>["form"];
   isNew: boolean;
   code: string;
   onCodeChange: (val: string) => void;
@@ -83,27 +84,25 @@ export function PluginForm({
       <form.Field
         name="name"
         children={(field) => (
-          <div className="field label border">
-            <input
-              value={field.state.value}
-              onBlur={field.handleBlur}
-              onChange={(e) => field.handleChange(e.target.value)}
-            />
-            <label>名称</label>
-          </div>
+          <StringInput
+            label="名称"
+            value={field.state.value as any} // TODO
+            onBlur={field.handleBlur}
+            onChange={field.handleChange as any}
+            disabled={form.state.isSubmitting}
+          />
         )}
       />
       <form.Field
         name="description"
         children={(field) => (
-          <div className="field label border">
-            <input
-              value={field.state.value}
-              onBlur={field.handleBlur}
-              onChange={(e) => field.handleChange(e.target.value)}
-            />
-            <label>描述</label>
-          </div>
+          <StringInput
+            label="描述"
+            value={field.state.value as any} // TODO
+            onBlur={field.handleBlur}
+            onChange={field.handleChange as any}
+            disabled={form.state.isSubmitting}
+          />
         )}
       />
       <Gap h={3} />

@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import React, { useState } from "react";
+import { useState } from "react";
 import { v7 as uuid } from "uuid";
 import { Gap } from "~/components/Gap";
 import { Navbar } from "~/components/Navbar";

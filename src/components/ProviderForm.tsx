@@ -4,6 +4,7 @@ import { useNavigate } from "@tanstack/react-router";
 import { v7 as uuid } from "uuid";
 import type { ProviderType } from "~/utils/ai/provider";
 import { db, type Provider } from "~/utils/db";
+import { StringInput } from "./beer-input/StringInput";
 
 export function useProviderForm(provider?: Provider, afterSubmit?: () => void) {
   const navigate = useNavigate();
@@ -70,55 +71,50 @@ export function ProviderForm({
       <form.Field
         name="name"
         children={(field) => (
-          <div className="field label border">
-            <input
-              type="text"
-              value={field.state.value}
-              onBlur={field.handleBlur}
-              onChange={(e) => field.handleChange(e.target.value)}
-            />
-            <label>名称</label>
-            <span className="helper">提供者名称</span>
-          </div>
+          <StringInput
+            label="名称"
+            description="提供者名称"
+            value={field.state.value}
+            onBlur={field.handleBlur}
+            onChange={field.handleChange}
+            disabled={form.state.isSubmitting}
+          />
         )}
       />
       <form.Field
         name="baseURL"
         children={(field) => (
-          <div className="field label border">
-            <input
-              value={field.state.value}
-              onBlur={field.handleBlur}
-              onChange={(e) => field.handleChange(e.target.value)}
-            />
-            <label>Base URL</label>
-          </div>
+          <StringInput
+            label="Base URL"
+            value={field.state.value}
+            onBlur={field.handleBlur}
+            onChange={field.handleChange}
+            disabled={form.state.isSubmitting}
+          />
         )}
       />
       <form.Field
         name="encryptedApiKey"
         children={(field) => (
-          <div className="field label border">
-            <input
-              value={field.state.value}
-              onBlur={field.handleBlur}
-              onChange={(e) => field.handleChange(e.target.value)}
-            />
-            <label>API Key</label>
-          </div>
+          <StringInput
+            label="API Key"
+            value={field.state.value}
+            onBlur={field.handleBlur}
+            onChange={field.handleChange}
+            disabled={form.state.isSubmitting}
+          />
         )}
       />
       <form.Field
         name="model"
         children={(field) => (
-          <div className="field label border">
-            <input
-              value={field.state.value}
-              onBlur={field.handleBlur}
-              onChange={(e) => field.handleChange(e.target.value)}
-            />
-            <label>Model</label>
-          </div>
+          <StringInput
+            label="Model"
+            value={field.state.value}
+            onBlur={field.handleBlur}
+            onChange={field.handleChange}
+            disabled={form.state.isSubmitting}
+          />
         )}
       />
       <nav className="right-align">

@@ -15,8 +15,6 @@ function EditPluginConfig() {
   >(async () => {
     if (type === "plugin") {
       const got = await db.plugins.get(id);
-      // if (!got) return undefined;
-      // return { type: "plugin", plugin: await db.plugins.get(id) };
       return got ? { type: "plugin", plugin: got } : undefined;
     }
     const host = await match(type)
@@ -65,9 +63,6 @@ function EditPluginConfig() {
   return (
     <>
       <Navbar
-        // title={`配置 ${plugin.name} for ${
-        //   parent.type === "plugin" ? parent.plugin.name : parent.host.name
-        // }`}
         title="插件配置"
         enableBack
         navigationFallback={(go) =>

@@ -1,9 +1,6 @@
 import { v7 as uuid } from "uuid";
 import type { Role } from "~/utils/ai/chat";
-import {
-  getDefaultConfig,
-  loadPluginFromString,
-} from "~/utils/ai/plugin-utils";
+import { loadPluginFromString } from "~/utils/ai/plugin-utils";
 import type { PluginInfo } from "~/utils/db";
 import { db, type Chat } from "~/utils/db";
 
