@@ -137,15 +137,6 @@ export async function insertMockPlugins() {
   const plugin2 = (await loadPluginFromString(
     pluginContent2,
   )) as PluginInfo<{}>;
-  // id: Uuid;
-  // contentHash: ContentHash; // Unique hash for the plugin content
-  // name: string;
-  // tags: string[];
-  // description: string;
-  // configSchema: TSchema;
-  // content: string;
-  // defaultConfig: ConfigFromSchema<TSchema>;
-  // globalConfig: Partial<ConfigFromSchema<TSchema>>;
   const pluginSave1: PluginInfo<{
     proxy: { type: "string"; default: ""; description: "代理服务器地址" };
     timeout: {
@@ -161,7 +152,6 @@ export async function insertMockPlugins() {
   }> = {
     id: uuid(),
     tags: [],
-    contentHash: "hash1",
     name: plugin1.name,
     description: plugin1.description,
     globalConfig: {},
@@ -171,7 +161,6 @@ export async function insertMockPlugins() {
   const pluginSave2: PluginInfo<{}> = {
     id: uuid(),
     tags: [],
-    contentHash: "hash2",
     name: plugin2.name,
     description: plugin2.description,
     globalConfig: {},

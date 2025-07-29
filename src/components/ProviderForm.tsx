@@ -65,6 +65,7 @@ export function ProviderForm({
               <option value="google">Google</option>
             </select>
             <label>提供者类型</label>
+            <i>arrow_drop_down</i>
           </div>
         )}
       />

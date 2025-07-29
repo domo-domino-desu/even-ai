@@ -1,122 +1,97 @@
 // oxlint-disable no-children-prop
-import { javascript } from "@codemirror/lang-javascript";
-import { useForm } from "@tanstack/react-form";
 import { useNavigate } from "@tanstack/react-router";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
+
+import { javascript } from "@codemirror/lang-javascript";
+import toast from "react-hot-toast";
 import { v7 as uuid } from "uuid";
+
+import { StringInput } from "~/components//beer-input/StringInput";
 import { Gap } from "~/components/Gap";
+import { useListenToEvent } from "~/state/event-bus";
 import type { ConfigSchema } from "~/utils/ai/plugin";
+import { loadPluginFromString } from "~/utils/ai/plugin-utils";
 import { db, type PluginInfo } from "~/utils/db";
-import { StringInput } from "./beer-input/StringInput";
 
 const CodeMirror = React.lazy(() => import("@uiw/react-codemirror"));
 
-export function usePluginForm<TSchema extends ConfigSchema>(
-  plugin?: PluginInfo<TSchema>,
-  afterSubmit?: () => void,
-) {
-  const navigate = useNavigate();
-  const [code, setCode] = useState(plugin?.content ?? "");
-  const onCodeChange = useCallback((val: string) => {
-    setCode(val);
-  }, []);
-
-  useEffect(() => {
-    if (plugin) {
-      setCode(plugin.content);
-    }
-  }, [plugin]);
-
-  const form = useForm({
-    defaultValues: plugin ?? {
-      name: "",
-      description: "",
-      tags: [],
-      content: "",
-    },
-    onSubmit: async ({ value }) => {
-      if (plugin) {
-        await db.plugins.update(plugin.id, {
-          name: value.name,
-          description: value.description,
-          tags: value.tags,
-          content: code,
-          contentHash: "temp-hash", // TODO: calculate hash
-          configSchema: {}, // TODO: parse from code
-        });
-      } else {
-        await db.plugins.add({
-          id: uuid(),
-          ...value,
-          content: code,
-          contentHash: "temp-hash", // TODO: calculate hash
-          configSchema: {}, // TODO: parse from code
-          globalConfig: {},
-        });
-      }
-      afterSubmit?.();
-      navigate({ to: "/setting/plugin" });
-    },
-  });
-
-  return { form, code, onCodeChange };
-}
+const defaultValues: PluginInfo<any> = {
+  id: uuid(),
+  name: "",
+  description: "",
+  tags: [],
+  content: "",
+  configSchema: {},
+  globalConfig: {},
+};
 
 export function PluginForm<TSchema extends ConfigSchema>({
-  form,
-  isNew,
-  code,
-  onCodeChange,
+  initialValues = {} as PluginInfo<TSchema>,
+  afterSubmit,
 }: {
-  form: ReturnType<typeof usePluginForm<TSchema>>["form"];
-  isNew: boolean;
-  code: string;
-  onCodeChange: (val: string) => void;
+  initialValues?: PluginInfo<TSchema>;
+  afterSubmit?: () => void;
+  ref?: React.Ref<HTMLDivElement>;
 }) {
+  const [state, setState] = useState<PluginInfo<TSchema>>(initialValues);
+  const navigate = useNavigate();
+
+  const setContent = useCallback(
+    ({ content }: { content: string }) => {
+      setState((prev) => ({ ...prev, content }));
+    },
+    [setState],
+  );
+
+  useListenToEvent("plugin:download", setContent);
+
   return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        form.handleSubmit();
-      }}
-    >
-      <form.Field
-        name="name"
-        children={(field) => (
-          <StringInput
-            label="名称"
-            value={field.state.value as any} // TODO
-            onBlur={field.handleBlur}
-            onChange={field.handleChange as any}
-            disabled={form.state.isSubmitting}
-          />
-        )}
+    <>
+      <StringInput
+        label="名称"
+        value={state.name}
+        onChange={(value) => setState((prev) => ({ ...prev, name: value }))}
       />
-      <form.Field
-        name="description"
-        children={(field) => (
-          <StringInput
-            label="描述"
-            value={field.state.value as any} // TODO
-            onBlur={field.handleBlur}
-            onChange={field.handleChange as any}
-            disabled={form.state.isSubmitting}
-          />
-        )}
+      <StringInput
+        label="描述"
+        value={state.description}
+        onChange={(value) =>
+          setState((prev) => ({ ...prev, description: value }))
+        }
       />
       <Gap h={3} />
       <CodeMirror
-        value={code}
+        value={state.content}
         width="calc(100vw - 2.5rem)"
         className="un-overflow-hidden"
-        extensions={[javascript({ jsx: true })]}
-        onChange={onCodeChange}
+        extensions={[javascript({ jsx: false })]}
+        onChange={(value) => setState((prev) => ({ ...prev, content: value }))}
       />
       <Gap h={3} />
       <nav className="right-align">
-        <button type="submit">{isNew ? "创建" : "保存"}</button>
+        <button
+          type="button"
+          onClick={async () => {
+            try {
+              const plugin = await loadPluginFromString(state.content);
+              const configSchema = plugin.configSchema as TSchema;
+              await db.plugins.put({
+                ...defaultValues,
+                ...state,
+                id: state.id || uuid(),
+                configSchema,
+              });
+              await afterSubmit?.();
+              navigate({ to: "/setting/plugin" });
+            } catch (error) {
+              toast.error("保存插件失败，请检查代码是否正确");
+              console.error("Error saving plugin:", error);
+            }
+          }}
+        >
+          保存配置
+        </button>
       </nav>
-    </form>
+    </>
   );
 }

@@ -5,11 +5,9 @@ import type { ConfigFromSchema, ConfigSchema } from "~/utils/ai/plugin";
 import type { ProviderType } from "~/utils/ai/provider";
 
 export type Uuid = string;
-export type ContentHash = string;
 
 export interface PluginInfo<TSchema extends ConfigSchema> {
   id: Uuid;
-  contentHash: ContentHash; // Unique hash for the plugin content
   name: string;
   tags: string[];
   description: string;
@@ -62,7 +60,7 @@ export const db = new Dexie("even_ai") as Dexie & {
   kv_storage: Table<GenericKV, [string, string]>;
 };
 db.version(1).stores({
-  plugins: "id, name, &contentHash, *tags",
+  plugins: "id, name, *tags",
   prefabs: "id, name, *tags",
   ai_providers: "id, name, *tags",
   chats: "id, name, updatedAt, *tags",

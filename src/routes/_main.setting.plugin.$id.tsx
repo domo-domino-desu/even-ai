@@ -2,13 +2,16 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useLiveQuery } from "dexie-react-hooks";
 import { Gap } from "~/components/Gap";
 import { Navbar } from "~/components/Navbar";
-import { PluginForm, usePluginForm } from "~/components/PluginForm";
+import { PluginForm } from "~/components/PluginForm";
 import { db } from "~/utils/db";
 
 function EditPlugin() {
   const { id } = Route.useParams();
   const plugin = useLiveQuery(() => db.plugins.get(id), [id]);
-  const { form, code, onCodeChange } = usePluginForm(plugin);
+
+  if (!plugin) {
+    return <div className="empty">插件不存在</div>;
+  }
 
   return (
     <>
@@ -27,12 +30,7 @@ function EditPlugin() {
           </Link>
         </nav>
         <Gap h={3} />
-        <PluginForm
-          form={form}
-          isNew={false}
-          code={code}
-          onCodeChange={onCodeChange}
-        />
+        <PluginForm initialValues={plugin} />
       </main>
     </>
   );

@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Navbar } from "~/components/Navbar";
-import { PluginForm, usePluginForm } from "~/components/PluginForm";
+import { PluginForm } from "~/components/PluginForm";
 
 const pluginTemplate = `export default createPlugin({
   name: "Plugin Name",
@@ -13,10 +13,6 @@ const pluginTemplate = `export default createPlugin({
 `;
 
 function NewPlugin() {
-  const { form, code, onCodeChange } = usePluginForm({
-    content: pluginTemplate,
-  } as any);
-
   return (
     <>
       <Navbar
@@ -25,7 +21,7 @@ function NewPlugin() {
         navigationFallback={(go) => go({ to: "/setting/plugin" })}
       />
       <main className="padding">
-        <PluginForm form={form} isNew code={code} onCodeChange={onCodeChange} />
+        <PluginForm />
       </main>
     </>
   );

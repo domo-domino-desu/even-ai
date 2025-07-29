@@ -2,6 +2,7 @@ import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useLiveQuery } from "dexie-react-hooks";
 import { Navbar } from "~/components/Navbar";
+import type { ConfigSchema } from "~/utils/ai/plugin";
 import { db, type PluginInfo } from "~/utils/db";
 import { insertMockPlugins } from "~/utils/mock-data";
 
@@ -11,7 +12,11 @@ function deletePlugin(pluginId: string) {
   });
 }
 
-function PluginCard({ plugin }: { plugin: PluginInfo<any> }) {
+function PluginCard<TSchema extends ConfigSchema>({
+  plugin,
+}: {
+  plugin: PluginInfo<TSchema>;
+}) {
   const navigate = useNavigate({ from: "/setting/plugin" });
 
   return (

@@ -18,8 +18,6 @@ export function ConfigForm<TSchema extends ConfigSchema>({
   onSave: (data: Partial<ConfigFromSchema<TSchema>>) => Promise<any> | void;
   afterSubmit?: () => void;
 }) {
-  console.log(JSON.stringify({ configSchema, initialValues }, null, 2));
-
   const [state, setState] = useState(initialValues);
 
   function handleOverrideChange(key: keyof TSchema, value: boolean) {

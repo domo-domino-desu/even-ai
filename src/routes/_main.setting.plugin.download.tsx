@@ -1,53 +1,30 @@
-import { javascript } from "@codemirror/lang-javascript";
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import React, { useCallback, useState } from "react";
-import { v7 as uuid } from "uuid";
+import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
+
+import toast from "react-hot-toast";
+
 import { StringInput } from "~/components/beer-input/StringInput";
 import { Gap } from "~/components/Gap";
 import { Navbar } from "~/components/Navbar";
-import { db } from "~/utils/db";
-
-const CodeMirror = React.lazy(() => import("@uiw/react-codemirror"));
+import { PluginForm } from "~/components/PluginForm";
+import { usePublishEvent } from "~/state/event-bus";
 
 function DownloadPlugin() {
-  const navigate = useNavigate();
   const [url, setUrl] = useState("");
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [code, setCode] = useState("");
-  const onCodeChange = useCallback((val: string) => {
-    setCode(val);
-  }, []);
+  const publish = usePublishEvent();
 
   async function fetchContent() {
     try {
-      // TODO: add cors proxy
+      if (!url) {
+        toast.error("请输入插件 URL");
+        return;
+      }
       const response = await fetch(url);
-      const text = await response.text();
-      setCode(text);
+      const content = await response.text();
+      publish("plugin:download", { content });
     } catch (error) {
       console.error("Failed to fetch content:", error);
-      setCode("Failed to fetch content.");
     }
-  }
-
-  async function handleCreate() {
-    if (!name || !code) {
-      // Basic validation
-      alert("名称和内容不能为空");
-      return;
-    }
-    await db.plugins.add({
-      id: uuid(),
-      name,
-      description,
-      tags: [],
-      content: code,
-      contentHash: "temp-hash", // TODO: calculate hash
-      configSchema: {}, // TODO: parse from code
-      globalConfig: {},
-    });
-    navigate({ to: "/setting/plugin" });
   }
 
   return (
@@ -58,34 +35,19 @@ function DownloadPlugin() {
         navigationFallback={(go) => go({ to: "/setting/plugin" })}
       />
       <main className="padding">
-        <div className="row">
+        <nav>
           <StringInput
+            className="max"
+            label="插件 URL"
             value={url}
             onChange={setUrl}
-            label="链接"
-            className="max"
           />
-          <button onClick={fetchContent}>获取</button>
-        </div>
-        <Gap h={3} />
-        <StringInput value={name} onChange={setName} label="名称" />
-        <StringInput
-          value={description}
-          onChange={setDescription}
-          label="描述"
-        />
-        <Gap h={3} />
-        <CodeMirror
-          value={code}
-          width="calc(100vw - 2.5rem)"
-          className="un-overflow-hidden"
-          extensions={[javascript({ jsx: true })]}
-          onChange={onCodeChange}
-        />
-        <Gap h={3} />
-        <nav className="right-align">
-          <button onClick={handleCreate}>创建</button>
+          <button onClick={fetchContent}>导入</button>
         </nav>
+        <Gap h={4} />
+        <hr />
+        <div />
+        <PluginForm />
       </main>
     </>
   );

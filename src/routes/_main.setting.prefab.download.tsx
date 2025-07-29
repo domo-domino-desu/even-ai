@@ -56,7 +56,6 @@ function DownloadPrefab() {
         description: pluginSpec.description,
         content: pluginSpec.content,
         tags: [],
-        contentHash: "temp-hash", // TODO: calculate hash
         configSchema: {}, // TODO: parse from code
         globalConfig: {},
       });
