@@ -1,10 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Navbar } from "~/components/Navbar";
-import { PrefabForm, usePrefabForm } from "~/components/PrefabForm";
+import { PrefabForm } from "~/components/PrefabForm";
 
 function NewPrefab() {
-  const form = usePrefabForm();
-
   return (
     <>
       <Navbar
@@ -13,7 +11,7 @@ function NewPrefab() {
         navigationFallback={(go) => go({ to: "/setting/prefab" })}
       />
       <main className="padding">
-        <PrefabForm form={form} isNew />
+        <PrefabForm isNew />
       </main>
     </>
   );

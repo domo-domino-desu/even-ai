@@ -2,13 +2,12 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useLiveQuery } from "dexie-react-hooks";
 import { Gap } from "~/components/Gap";
 import { Navbar } from "~/components/Navbar";
-import { PrefabForm, usePrefabForm } from "~/components/PrefabForm";
+import { PrefabForm } from "~/components/PrefabForm";
 import { db } from "~/utils/db";
 
 function EditPrefab() {
   const { id } = Route.useParams();
   const prefab = useLiveQuery(() => db.prefabs.get(id), [id]);
-  const form = usePrefabForm(prefab);
 
   return (
     <>
@@ -33,7 +32,7 @@ function EditPrefab() {
           </Link>
         </div>
         <Gap h={3} />
-        <PrefabForm form={form} isNew={false} />
+        <PrefabForm key={prefab?.id} prefab={prefab} isNew={false} />
       </main>
     </>
   );

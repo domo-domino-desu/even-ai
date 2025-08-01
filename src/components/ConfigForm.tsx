@@ -87,7 +87,11 @@ export function ConfigForm<TSchema extends ConfigSchema>({
                       <StringInput
                         label={key}
                         description={s.description}
-                        value={(state[key] as string) ?? ""}
+                        value={
+                          (state[key] as string) ??
+                          initialValues[key] ??
+                          configSchema[key].default
+                        }
                         onChange={(value) => handleChange(key, value)}
                         disabled={!isAble(key)}
                         small
@@ -97,7 +101,11 @@ export function ConfigForm<TSchema extends ConfigSchema>({
                       <NumberInput
                         label={key}
                         description={s.description}
-                        value={(state[key] as number) ?? 0}
+                        value={
+                          (state[key] as number) ??
+                          initialValues[key] ??
+                          configSchema[key].default
+                        }
                         onChange={(value) => handleChange(key, value)}
                         disabled={!isAble(key)}
                         small
@@ -107,7 +115,11 @@ export function ConfigForm<TSchema extends ConfigSchema>({
                       <BooleanInput
                         label={key}
                         description={s.description}
-                        value={state[key] as boolean}
+                        value={
+                          (state[key] as boolean) ??
+                          initialValues[key] ??
+                          configSchema[key].default
+                        }
                         onChange={(value) => handleChange(key, value)}
                         disabled={!isAble(key)}
                         small

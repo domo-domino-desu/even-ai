@@ -31,7 +31,6 @@ export function PluginForm<TSchema extends ConfigSchema>({
 }: {
   initialValues?: PluginInfo<TSchema>;
   afterSubmit?: () => void;
-  ref?: React.Ref<HTMLDivElement>;
 }) {
   const [state, setState] = useState<PluginInfo<TSchema>>(initialValues);
   const navigate = useNavigate();

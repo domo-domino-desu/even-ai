@@ -2,13 +2,12 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useLiveQuery } from "dexie-react-hooks";
 import { Gap } from "~/components/Gap";
 import { Navbar } from "~/components/Navbar";
-import { ProviderForm, useProviderForm } from "~/components/ProviderForm";
+import { ProviderForm } from "~/components/ProviderForm";
 import { db } from "~/utils/db";
 
 function EditProvider() {
   const { id } = Route.useParams();
   const provider = useLiveQuery(() => db.ai_providers.get(id), [id]);
-  const form = useProviderForm(provider);
 
   return (
     <>
@@ -33,7 +32,7 @@ function EditProvider() {
           </Link>
         </div>
         <Gap h={3} />
-        <ProviderForm form={form} isNew={false} />
+        <ProviderForm key={provider?.id} provider={provider} isNew={false} />
       </main>
     </>
   );

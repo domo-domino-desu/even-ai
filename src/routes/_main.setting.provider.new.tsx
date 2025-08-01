@@ -1,10 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Navbar } from "~/components/Navbar";
-import { ProviderForm, useProviderForm } from "~/components/ProviderForm";
+import { ProviderForm } from "~/components/ProviderForm";
 
 function NewProvider() {
-  const form = useProviderForm();
-
   return (
     <>
       <Navbar
@@ -13,7 +11,7 @@ function NewProvider() {
         navigationFallback={(go) => go({ to: "/setting/provider" })}
       />
       <main className="padding">
-        <ProviderForm form={form} isNew />
+        <ProviderForm isNew />
       </main>
     </>
   );

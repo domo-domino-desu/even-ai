@@ -10,21 +10,19 @@ export interface ProviderSettings {
   apiKey: string;
 }
 
+type AiConstructor = (settings: ProviderSettings) => ProviderV2;
+
 export const SUPPORTED_PROVIDERS = ["openai", "gemini"] as const;
-export const PROVIDER_INFO: Record<
-  ProviderType,
-  {
-    defaultURL: string;
-    constructor: (settings: ProviderSettings) => ProviderV2;
-  }
-> = {
+export const PROVIDER_INFO = {
   openai: {
     defaultURL: "https://api.openai.com/v1",
-    constructor: createOpenAI,
+    constructor: createOpenAI as AiConstructor,
+    urlTip: "预期以v1结尾",
   },
   gemini: {
     defaultURL: "https://generativeai.googleapis.com/v1beta",
-    constructor: createGoogleGenerativeAI,
+    constructor: createGoogleGenerativeAI as AiConstructor,
+    urlTip: "预期以v1beta结尾",
   },
 };
 const clientCache: Map<string, ProviderV2> = new Map();
