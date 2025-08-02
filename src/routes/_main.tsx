@@ -5,7 +5,7 @@ import { match } from "ts-pattern";
 
 import { GateKeeper } from "~/components/GateKeeper";
 import { modeAtom } from "~/state/mode";
-import { useBeerSize } from "~/utils/ui-utils";
+import { ICON_NAME, useBeerSize } from "~/utils/ui-utils";
 
 export const Route = createFileRoute("/_main")({
   component: MainLayout,
@@ -49,15 +49,15 @@ export function NavRail() {
         })}
       >
         <Link to="/chat">
-          <i>chat</i>
+          <i>{ICON_NAME.chat}</i>
           <span>对话</span>
         </Link>
         <Link to="/log">
-          <i>history</i>
+          <i>{ICON_NAME.log}</i>
           <span>日志</span>
         </Link>
         <Link to="/setting">
-          <i>settings</i>
+          <i>{ICON_NAME.setting}</i>
           <span>设置</span>
         </Link>
         {(size.m || size.l) && (

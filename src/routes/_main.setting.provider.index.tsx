@@ -5,6 +5,7 @@ import toast from "react-hot-toast";
 import { Navbar } from "~/components/Navbar";
 import { db, type Provider } from "~/utils/db";
 import { insertMockProviders } from "~/utils/mock-data";
+import { ICON_NAME } from "~/utils/ui-utils";
 
 function deleteProvider(providerId: string) {
   db.ai_providers.delete(providerId).catch((error) => {
@@ -25,7 +26,7 @@ function ProviderCard({ provider }: { provider: Provider }) {
       <nav>
         <h6 className="max">{provider.name}</h6>
         <button className="circle transparent">
-          <i>edit</i>
+          <i>{ICON_NAME.edit}</i>
         </button>
         <button
           className="circle transparent"
@@ -34,7 +35,7 @@ function ProviderCard({ provider }: { provider: Provider }) {
             deleteProvider(provider.id);
           }}
         >
-          <i>delete</i>
+          <i>{ICON_NAME.delete}</i>
         </button>
       </nav>
       <p>{provider.description}</p>
@@ -70,12 +71,12 @@ export function ProviderList() {
       >
         {import.meta.env.DEV && (
           <button className="circle transparent" onClick={insertMockProviders}>
-            <i>bug_report</i>
+            <i>{ICON_NAME.debug}</i>
           </button>
         )}
         <button className="circle transparent">
           <Link to="/setting/provider/new">
-            <i>add</i>
+            <i>{ICON_NAME.add}</i>
           </Link>
         </button>
       </Navbar>

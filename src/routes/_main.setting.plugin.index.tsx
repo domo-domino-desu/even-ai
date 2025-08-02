@@ -6,6 +6,7 @@ import { Navbar } from "~/components/Navbar";
 import type { ConfigSchema } from "~/utils/ai/plugin";
 import { db, type PluginInfo } from "~/utils/db";
 import { insertMockPlugins } from "~/utils/mock-data";
+import { ICON_NAME } from "~/utils/ui-utils";
 
 function deletePlugin(pluginId: string) {
   db.plugins.delete(pluginId).catch((error) => {
@@ -30,7 +31,7 @@ function PluginCard<TSchema extends ConfigSchema>({
       <nav>
         <h6 className="max">{plugin.name}</h6>
         <button className="circle transparent">
-          <i>edit</i>
+          <i>{ICON_NAME.edit}</i>
         </button>
         <button
           className="circle transparent"
@@ -39,7 +40,7 @@ function PluginCard<TSchema extends ConfigSchema>({
             deletePlugin(plugin.id);
           }}
         >
-          <i>delete</i>
+          <i>{ICON_NAME.delete}</i>
         </button>
       </nav>
       <p>{plugin.description}</p>
@@ -56,8 +57,8 @@ function EmptyCard() {
         </div>
       </nav>
       <p>
-        点击右上角的 “<i>add</i>” 新建插件， 或点击 “<i>download</i>”
-        从链接下载。
+        点击右上角的 “<i>{ICON_NAME.add}</i>” 新建插件， 或点击 “
+        <i>{ICON_NAME.download}</i>” 从链接下载。
       </p>
     </article>
   );
@@ -76,17 +77,17 @@ export function PluginList() {
       >
         {import.meta.env.DEV && (
           <button className="circle transparent" onClick={insertMockPlugins}>
-            <i>bug_report</i>
+            <i>{ICON_NAME.debug}</i>
           </button>
         )}
         <button className="circle transparent">
           <Link to="/setting/plugin/new">
-            <i>download</i>
+            <i>{ICON_NAME.download}</i>
           </Link>
         </button>
         <button className="circle transparent">
           <Link to="/setting/plugin/new">
-            <i>add</i>
+            <i>{ICON_NAME.add}</i>
           </Link>
         </button>
       </Navbar>

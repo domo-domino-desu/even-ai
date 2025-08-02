@@ -1,7 +1,7 @@
 import { useCanGoBack, useNavigate, useRouter } from "@tanstack/react-router";
 import { clsx } from "clsx";
 import { useRef } from "react";
-import { useBeerSize } from "~/utils/ui-utils";
+import { ICON_NAME, useBeerSize } from "~/utils/ui-utils";
 
 function getNavStyle(size: ReturnType<typeof useBeerSize>) {
   return clsx("top padding un-max-w-100vw un-overflow-scroll", {
@@ -41,7 +41,7 @@ export function Navbar({
             }
           }}
         >
-          <i>arrow_back</i>
+          <i>{ICON_NAME.back}</i>
         </button>
       )}
       <h5 className="un-flex-grow-1! un-min-w-0! un-overflow-hidden! un-text-ellipsis! un-flex-[unset]! un-whitespace-nowrap! un-text-left">

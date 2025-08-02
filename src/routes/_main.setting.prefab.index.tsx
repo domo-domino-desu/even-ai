@@ -5,6 +5,7 @@ import toast from "react-hot-toast";
 import { Navbar } from "~/components/Navbar";
 import { db, type Prefab } from "~/utils/db";
 import { insertMockPrefabs } from "~/utils/mock-data";
+import { ICON_NAME } from "~/utils/ui-utils";
 
 function deletePrefab(prefabId: string) {
   db.prefabs.delete(prefabId).catch((error) => {
@@ -28,7 +29,7 @@ function PrefabCard({ prefab }: { prefab: Prefab }) {
       <nav>
         <h6 className="max">{prefab.name}</h6>
         <button className="circle transparent">
-          <i>edit</i>
+          <i>{ICON_NAME.edit}</i>
         </button>
         <button
           className="circle transparent"
@@ -37,7 +38,7 @@ function PrefabCard({ prefab }: { prefab: Prefab }) {
             deletePrefab(prefab.id);
           }}
         >
-          <i>delete</i>
+          <i>{ICON_NAME.delete}</i>
         </button>
       </nav>
       <p>{prefab.description}</p>
@@ -54,8 +55,8 @@ function EmptyCard() {
         </div>
       </nav>
       <p>
-        点击右上角的 “<i>add</i>” 新建预组， 或点击 “<i>download</i>”
-        从连接下载。
+        点击右上角的 “<i>{ICON_NAME.add}</i>” 新建预组，或点击 “
+        <i>{ICON_NAME.download}</i>” 从连接下载。
       </p>
     </article>
   );
@@ -74,17 +75,17 @@ export function PrefabList() {
       >
         {import.meta.env.DEV && (
           <button className="circle transparent" onClick={insertMockPrefabs}>
-            <i>bug_report</i>
+            <i>{ICON_NAME.debug}</i>
           </button>
         )}
         <button className="circle transparent">
           <Link to="/setting/prefab/download">
-            <i>download</i>
+            <i>{ICON_NAME.download}</i>
           </Link>
         </button>
         <button className="circle transparent">
           <Link to="/setting/prefab/new">
-            <i>add</i>
+            <i>{ICON_NAME.add}</i>
           </Link>
         </button>
       </Navbar>

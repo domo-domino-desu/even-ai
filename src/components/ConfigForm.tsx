@@ -58,7 +58,7 @@ export function ConfigForm<TSchema extends ConfigSchema>({
   }
 
   if (Object.keys(configSchema).length === 0) {
-    return "没有配置项";
+    return <p>没有配置项</p>;
   }
 
   return (

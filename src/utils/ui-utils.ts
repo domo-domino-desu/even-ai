@@ -35,3 +35,23 @@ export const PATH_NAME = {
   prefab: "预组",
   plugin: "插件",
 } as const;
+
+export const ICON_NAME = {
+  back: "arrow_back",
+  dropdown: "arrow_drop_down",
+  chevron_right: "chevron_right",
+
+  add: "add",
+  edit: "edit",
+  delete: "delete",
+
+  chat: "chat",
+  log: "history",
+  setting: "settings",
+  provider: "neurology",
+  prefab: "skillet",
+  plugin: "extension",
+
+  debug: "bug_report",
+  download: "cloud_download",
+} as const;

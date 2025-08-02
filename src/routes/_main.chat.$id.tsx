@@ -16,7 +16,7 @@ import { Gap } from "~/components/Gap";
 import { Navbar } from "~/components/Navbar";
 import type { Message } from "~/utils/ai/chat";
 import { db } from "~/utils/db";
-import { useBeerSize } from "~/utils/ui-utils";
+import { ICON_NAME, useBeerSize } from "~/utils/ui-utils";
 import { FlexStringInput } from "../components/beer-input/FlexStringInput";
 
 function NotFound() {
@@ -114,24 +114,32 @@ function Chat() {
         navigationFallback={(go) => go({ to: "/chat" })}
       >
         {chat && (
-          <button className="circle transparent">
-            <Link
-              to="/setting/config-plugin/list/$type/$id"
-              params={{ type: "chat", id }}
-            >
-              <i>extension</i>
-            </Link>
-          </button>
-        )}
-        {chat && (
-          <button className="circle transparent">
-            <Link
-              to="/setting/import-prefab/$type/$id"
-              params={{ type: "chat", id }}
-            >
-              <i>skillet</i>
-            </Link>
-          </button>
+          <>
+            <button className="circle transparent">
+              <Link
+                to="/setting/import-prefab/$type/$id"
+                params={{ type: "chat", id }}
+              >
+                <i>{ICON_NAME.provider}</i>
+              </Link>
+            </button>
+            <button className="circle transparent">
+              <Link
+                to="/setting/config-plugin/list/$type/$id"
+                params={{ type: "chat", id }}
+              >
+                <i>{ICON_NAME.plugin}</i>
+              </Link>
+            </button>
+            <button className="circle transparent">
+              <Link
+                to="/setting/import-prefab/$type/$id"
+                params={{ type: "chat", id }}
+              >
+                <i>{ICON_NAME.prefab}</i>
+              </Link>
+            </button>
+          </>
         )}
       </Navbar>
       {chat !== null &&

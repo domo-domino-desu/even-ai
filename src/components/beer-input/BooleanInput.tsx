@@ -1,4 +1,5 @@
 import { clsx, type ClassValue } from "clsx";
+import { ICON_NAME } from "~/utils/ui-utils";
 
 export function BooleanInput({
   label,
@@ -32,7 +33,7 @@ export function BooleanInput({
         <option value={"false"}>否</option>
       </select>
       <label>{label}</label>
-      <i>arrow_drop_down</i>
+      <i>{ICON_NAME.dropdown}</i>
       {description && <span className="helper">{description}</span>}
     </div>
   );

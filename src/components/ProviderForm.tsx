@@ -6,6 +6,7 @@ import { StringInput } from "~/components/beer-input/StringInput";
 import { cryptoInfoAtom, cryptoManagerAtom } from "~/state/crypto";
 import { PROVIDER_INFO, type ProviderType } from "~/utils/ai/provider";
 import { type Provider } from "~/utils/db";
+import { ICON_NAME } from "~/utils/ui-utils";
 
 const defaultValues = {
   name: "请填写名称",
@@ -68,7 +69,7 @@ export function ProviderForm({
           <option value="gemini">Google</option>
         </select>
         <label>提供者类型</label>
-        <i>arrow_drop_down</i>
+        <i>{ICON_NAME.dropdown}</i>
       </div>
       <StringInput
         label="名称"
@@ -109,7 +110,7 @@ export function ProviderForm({
               console.log(await cryptoManager?.decrypt(state.encryptedApiKey))
             }
           >
-            <i>bug_report</i>
+            <i>{ICON_NAME.debug}</i>
           </button>
         )}
         <button onClick={handleSubmit}>{isNew ? "创建" : "保存"}</button>

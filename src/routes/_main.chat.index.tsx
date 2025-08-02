@@ -8,6 +8,7 @@ import { Gap } from "~/components/Gap";
 import { Navbar } from "~/components/Navbar";
 import { db, type Chat } from "~/utils/db";
 import { insertMockChats } from "~/utils/mock-data";
+import { ICON_NAME } from "~/utils/ui-utils";
 
 function deleteChat(chatId: string) {
   db.chats.delete(chatId).catch((error) => {
@@ -31,7 +32,7 @@ function ChatCard({ chat }: { chat: Chat }) {
             to="/setting/config-plugin/list/$type/$id"
             params={{ type: "chat", id: chat.id }}
           >
-            <i>edit</i>
+            <i>{ICON_NAME.edit}</i>
           </Link>
         </button>
         <button
@@ -41,7 +42,7 @@ function ChatCard({ chat }: { chat: Chat }) {
             deleteChat(chat.id);
           }}
         >
-          <i>delete</i>
+          <i>{ICON_NAME.delete}</i>
         </button>
       </nav>
       <p>
@@ -92,7 +93,7 @@ function ChatList() {
       <Navbar title="对话列表">
         {import.meta.env.DEV && (
           <button className="circle transparent" onClick={insertMockChats}>
-            <i>bug_report</i>
+            <i>{ICON_NAME.debug}</i>
           </button>
         )}
         <button className="circle transparent">
@@ -103,7 +104,7 @@ function ChatList() {
             to="/setting/import-prefab/$type/$id"
             params={{ type: "chat", id: "new" }}
           >
-            <i>sms</i>
+            <i>{ICON_NAME.prefab}</i>
           </Link>
         </button>
       </Navbar>
