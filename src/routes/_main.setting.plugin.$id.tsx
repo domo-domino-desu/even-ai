@@ -10,7 +10,7 @@ function EditPlugin() {
   const plugin = useLiveQuery(() => db.plugins.get(id), [id]);
 
   if (!plugin) {
-    return <div className="empty">插件不存在</div>;
+    return "插件不存在";
   }
 
   return (

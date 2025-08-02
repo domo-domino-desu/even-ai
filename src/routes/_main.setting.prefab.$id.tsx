@@ -9,6 +9,10 @@ function EditPrefab() {
   const { id } = Route.useParams();
   const prefab = useLiveQuery(() => db.prefabs.get(id), [id]);
 
+  if (!prefab) {
+    return "预组不存在";
+  }
+
   return (
     <>
       <Navbar

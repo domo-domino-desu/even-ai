@@ -10,6 +10,10 @@ function EditProvider() {
   const { id } = Route.useParams();
   const provider = useLiveQuery(() => db.ai_providers.get(id), [id]);
 
+  if (!provider) {
+    return "提供者不存在";
+  }
+
   return (
     <>
       <Navbar

@@ -1,4 +1,5 @@
 import { v7 as uuid } from "uuid";
+import { cryptoManagerAtom } from "~/state/crypto";
 import type { Role } from "~/utils/ai/chat";
 import { loadPluginFromString } from "~/utils/ai/plugin-utils";
 import type { PluginInfo } from "~/utils/db";
@@ -42,9 +43,10 @@ export function insertMockProviders() {
       tags: ["official"],
       description: "OpenAI official provider",
       providerType: "openai" as const,
-      baseURL: "https://api.openai.com/v1",
-      encryptedApiKey: "...",
-      model: "gpt-4",
+      baseURL:
+        import.meta.env.VITE_OPENAI_BASE_URL || "https://api.openai.com/v1",
+      encryptedApiKey: import.meta.env.VITE_OPENAI_API_KEY || "...",
+      model: import.meta.env.VITE_OPENAI_MODEL || "gpt-4",
       providerSettings: {},
       plugins: {},
     },
@@ -54,9 +56,11 @@ export function insertMockProviders() {
       tags: ["official"],
       description: "Google AI official provider",
       providerType: "gemini" as const,
-      baseURL: "https://generativelanguage.googleapis.com/v1beta",
-      encryptedApiKey: "...",
-      model: "gemini-pro",
+      baseURL:
+        import.meta.env.VITE_GEMINI_BASE_URL ||
+        "https://generativeai.googleapis.com/v1beta",
+      encryptedApiKey: import.meta.env.VITE_GEMINI_API_KEY || "...",
+      model: import.meta.env.VITE_GEMINI_MODEL || "gemini-pro",
       providerSettings: {},
       plugins: {},
     },
