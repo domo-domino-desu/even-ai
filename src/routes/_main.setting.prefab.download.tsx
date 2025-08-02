@@ -76,7 +76,7 @@ function DownloadPrefab() {
   return (
     <>
       <Navbar
-        title="从网络导入预组"
+        title="从网络导入插件集"
         enableBack
         navigationFallback={(go) => go({ to: "/setting/prefab" })}
       />

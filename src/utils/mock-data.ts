@@ -73,14 +73,14 @@ export function insertMockPrefabs() {
       id: uuid(),
       name: "编程助手",
       tags: ["dev", "coding"],
-      description: "用于编程的预组",
+      description: "用于编程的插件集",
       plugins: {},
     },
     {
       id: uuid(),
       name: "写作助手",
       tags: ["writing"],
-      description: "用于写作的预组",
+      description: "用于写作的插件集",
       plugins: {},
     },
   ];

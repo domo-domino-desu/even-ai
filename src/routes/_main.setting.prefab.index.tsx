@@ -9,7 +9,7 @@ import { ICON_NAME } from "~/utils/ui-utils";
 
 function deletePrefab(prefabId: string) {
   db.prefabs.delete(prefabId).catch((error) => {
-    toast.error("删除预组失败");
+    toast.error("删除插件集失败");
     console.error("Failed to delete prefab:", error);
   });
 }
@@ -55,7 +55,7 @@ function EmptyCard() {
         </div>
       </nav>
       <p>
-        点击右上角的 “<i>{ICON_NAME.add}</i>” 新建预组，或点击 “
+        点击右上角的 “<i>{ICON_NAME.add}</i>” 新建插件集，或点击 “
         <i>{ICON_NAME.download}</i>” 从连接下载。
       </p>
     </article>
@@ -69,7 +69,7 @@ export function PrefabList() {
   return (
     <>
       <Navbar
-        title="预组"
+        title="插件集"
         enableBack
         navigationFallback={(go) => go({ to: "/setting" })}
       >

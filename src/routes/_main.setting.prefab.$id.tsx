@@ -10,7 +10,7 @@ function EditPrefab() {
   const prefab = useLiveQuery(() => db.prefabs.get(id), [id]);
 
   if (!prefab) {
-    return "预组不存在";
+    return "插件集不存在";
   }
 
   return (
@@ -32,7 +32,7 @@ function EditPrefab() {
             to="/setting/import-prefab/$type/$id"
             params={{ type: "prefab", id }}
           >
-            <button>导入预组</button>
+            <button>导入插件集</button>
           </Link>
         </div>
         <Gap h={3} />

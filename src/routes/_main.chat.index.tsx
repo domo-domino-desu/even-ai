@@ -3,6 +3,7 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { useLiveQuery } from "dexie-react-hooks";
 import toast from "react-hot-toast";
+import { v7 as uuid } from "uuid";
 
 import { Gap } from "~/components/Gap";
 import { Navbar } from "~/components/Navbar";
@@ -78,15 +79,31 @@ function EmptyCard() {
       </nav>
       <p>
         点击右上角的 “<i className="small">{ICON_NAME.chat}</i>” 新建空白对话，
-        或点击 “<i className="small">{ICON_NAME.prefab}</i>” 从预组创建对话。
+        或点击 “<i className="small">{ICON_NAME.prefab}</i>” 从插件集创建对话。
       </p>
     </article>
   );
 }
 
 function ChatList() {
+  const navigate = useNavigate({ from: "/chat" });
   const [parent] = useAutoAnimate();
   const chats = useLiveQuery(() => db.chats.toArray(), [], null);
+
+  function handleCreateNewChat() {
+    const emptyChat = {
+      id: uuid(),
+      name: "新对话",
+      tags: [],
+      history: { messages: [] },
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      plugins: {},
+    };
+    db.chats.add(emptyChat).then(() => {
+      navigate({ to: "/chat/$id", params: { id: emptyChat.id } });
+    });
+  }
 
   return (
     <>
@@ -96,7 +113,7 @@ function ChatList() {
             <i>{ICON_NAME.debug}</i>
           </button>
         )}
-        <button className="circle transparent">
+        <button className="circle transparent" onClick={handleCreateNewChat}>
           <i>{ICON_NAME.chat}</i>
         </button>
         <button className="circle transparent">

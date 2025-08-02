@@ -48,7 +48,7 @@ function SettingsPage() {
                 className="row-padding un-flex un-justify-between"
               >
                 <i>{ICON_NAME.prefab}</i>
-                <div>预组设置</div>
+                <div>插件集设置</div>
                 <div className="max" />
                 <i>{ICON_NAME.chevron_right}</i>
               </Link>

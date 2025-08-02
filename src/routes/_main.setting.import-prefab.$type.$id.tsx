@@ -1,5 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useLiveQuery } from "dexie-react-hooks";
+import toast from "react-hot-toast";
 import { match, P } from "ts-pattern";
 import { v7 as uuid } from "uuid";
 import { Navbar } from "~/components/Navbar";
@@ -28,24 +29,38 @@ function ImportPrefab() {
       navigate({ to: `/chat/${newChatId}` });
     } else {
       await match(type)
-        .with("prefab", () =>
-          db.prefabs.update(id, { plugins: selectedPrefab.plugins }),
-        )
-        .with("provider", () =>
-          db.ai_providers.update(id, { plugins: selectedPrefab.plugins }),
-        )
-        .with("chat", () =>
-          db.chats.update(id, { plugins: selectedPrefab.plugins }),
-        )
+        .with("prefab", async () => {
+          const prefab = await db.prefabs.get(id);
+          db.prefabs.update(id, {
+            plugins: { ...prefab?.plugins, ...selectedPrefab.plugins },
+          });
+        })
+        .with("provider", async () => {
+          const provider = await db.ai_providers.get(id);
+          db.ai_providers.update(id, {
+            plugins: { ...provider?.plugins, ...selectedPrefab.plugins },
+          });
+        })
+        .with("chat", async () => {
+          const chat = await db.chats.get(id);
+          db.chats.update(id, {
+            plugins: { ...chat?.plugins, ...selectedPrefab.plugins },
+          });
+        })
         .otherwise(() => Promise.resolve());
 
-      navigate({ to: `/setting/${type}/${id}` });
+      toast.success("插件集导入成功");
+      navigate({
+        to: match([type, id])
+          .with(["chat", P.string], () => `/chat/${id}`)
+          .otherwise(() => `/setting/${type}/${id}`),
+      });
     }
   }
 
   const title = match([type, id])
-    .with(["chat", "new"], () => "从预组新建对话")
-    .otherwise(() => "导入预组");
+    .with(["chat", "new"], () => "从插件集新建对话")
+    .otherwise(() => "导入插件集");
 
   return (
     <>

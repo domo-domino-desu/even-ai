@@ -33,7 +33,7 @@ function EditProvider() {
             to="/setting/import-prefab/$type/$id"
             params={{ type: "provider", id }}
           >
-            <button>导入预组</button>
+            <button>导入插件集</button>
           </Link>
         </div>
         <Gap h={3} />

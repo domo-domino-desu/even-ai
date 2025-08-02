@@ -8,7 +8,7 @@ function NewPrefab() {
   return (
     <>
       <Navbar
-        title="新建预组"
+        title="新建插件集"
         enableBack
         navigationFallback={(go) => go({ to: "/setting/prefab" })}
       />
