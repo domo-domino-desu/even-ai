@@ -1,5 +1,4 @@
 import { v7 as uuid } from "uuid";
-import { cryptoManagerAtom } from "~/state/crypto";
 import type { Role } from "~/utils/ai/chat";
 import { loadPluginFromString } from "~/utils/ai/plugin-utils";
 import type { PluginInfo } from "~/utils/db";

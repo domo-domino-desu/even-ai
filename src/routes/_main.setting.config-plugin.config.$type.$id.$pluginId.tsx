@@ -74,7 +74,7 @@ function EditPluginConfig() {
         <ConfigForm
           key={pluginId}
           configSchema={plugin.configSchema}
-          initialValues={globalConfig as any}
+          initialValues={globalConfig}
           onSave={onSave}
         />
       </main>

@@ -7,6 +7,7 @@ export type EventPayload = {
 
 export type AppEvents = {
   "plugin:download": { content: string };
+  [key: string]: any;
 };
 
 export type EventName = keyof AppEvents;
