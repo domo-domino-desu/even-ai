@@ -43,10 +43,14 @@ function ImportPrefab() {
     }
   }
 
+  const title = match([type, id])
+    .with(["chat", "new"], () => "从预组新建对话")
+    .otherwise(() => "导入预组");
+
   return (
     <>
       <Navbar
-        title="导入预组"
+        title={title}
         enableBack
         navigationFallback={(go) =>
           match([type, id])

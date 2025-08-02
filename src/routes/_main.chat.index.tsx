@@ -77,8 +77,8 @@ function EmptyCard() {
         </div>
       </nav>
       <p>
-        点击右上角的 “<i className="small">chat_bubble</i>” 新建空白对话，
-        或点击 “<i className="small">sms</i>” 从模板创建对话。
+        点击右上角的 “<i className="small">{ICON_NAME.chat}</i>” 新建空白对话，
+        或点击 “<i className="small">{ICON_NAME.prefab}</i>” 从预组创建对话。
       </p>
     </article>
   );
@@ -97,7 +97,7 @@ function ChatList() {
           </button>
         )}
         <button className="circle transparent">
-          <i>chat_bubble</i>
+          <i>{ICON_NAME.chat}</i>
         </button>
         <button className="circle transparent">
           <Link

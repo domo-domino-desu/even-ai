@@ -49,7 +49,7 @@ export const ICON_NAME = {
   log: "history",
   setting: "settings",
   provider: "neurology",
-  prefab: "skillet",
+  prefab: "crossword",
   plugin: "extension",
 
   debug: "bug_report",
