@@ -129,7 +129,7 @@ function Chat() {
               to="/setting/import-prefab/$type/$id"
               params={{ type: "chat", id }}
             >
-              <i>input</i>
+              <i>skillet</i>
             </Link>
           </button>
         )}
