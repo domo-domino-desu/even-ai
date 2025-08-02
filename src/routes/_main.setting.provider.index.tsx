@@ -79,7 +79,7 @@ export function ProviderList() {
           </Link>
         </button>
       </Navbar>
-      <main className="padding responsive" ref={parent}>
+      <main className="padding" ref={parent}>
         {providers &&
           (providers.length ? (
             providers.map((provider) => (

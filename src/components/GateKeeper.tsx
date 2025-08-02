@@ -77,7 +77,7 @@ export function GateKeeper({ children }: { children?: React.ReactNode }) {
       // First visit, set password
       .with(P.nullish, () => {
         return (
-          <main className="responsive padding">
+          <main className="padding">
             <Gap h={2} />
             <h4>请设置密码</h4>
             <Gap h={2} />
@@ -123,7 +123,7 @@ export function GateKeeper({ children }: { children?: React.ReactNode }) {
         cryptoManager ? (
           children
         ) : (
-          <main className="responsive">
+          <main className="un-max-w-4xl un-mx-auto">
             <Gap h={2} />
             <h4>请输入密码</h4>
             <Gap h={2} />

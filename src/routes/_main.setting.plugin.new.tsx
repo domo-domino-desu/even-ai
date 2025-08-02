@@ -13,7 +13,7 @@ function DownloadPlugin() {
         enableBack
         navigationFallback={(go) => go({ to: "/setting/plugin" })}
       />
-      <main className="padding responsive">
+      <main className="padding">
         <PluginForm
           isNew
           onSave={async (pluginInfo) => {

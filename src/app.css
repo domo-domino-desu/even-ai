@@ -1,3 +1,11 @@
 [un-cloak] {
   display: none;
 }
+
+@media screen and (min-width: 1300px) {
+  main,
+  nav.top {
+    width: 60rem;
+    margin: 0 auto;
+  }
+}

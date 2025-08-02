@@ -136,7 +136,7 @@ function Chat() {
       </Navbar>
       {chat !== null &&
         (chat ? (
-          <main className="no-padding responsive" ref={container}>
+          <main className="no-padding" ref={container}>
             <div className="padding">
               {chat?.history?.messages?.map((message) => (
                 <Message key={message.id} message={message} />

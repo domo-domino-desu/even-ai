@@ -61,7 +61,7 @@ function EditPluginConfig() {
           })
         }
       />
-      <main className="vertical padding responsive">
+      <main className="vertical padding">
         {match(parent)
           .with({ type: "plugin" }, () => `正在配置${plugin.name}的全局配置`)
           .with(

@@ -12,7 +12,7 @@ function NewPrefab() {
         enableBack
         navigationFallback={(go) => go({ to: "/setting/prefab" })}
       />
-      <main className="padding responsive">
+      <main className="padding">
         <PrefabForm
           isNew
           onSave={async (prefab) => {

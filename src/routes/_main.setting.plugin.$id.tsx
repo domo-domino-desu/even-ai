@@ -20,7 +20,7 @@ function EditPlugin() {
         enableBack
         navigationFallback={(go) => go({ to: "/setting/plugin" })}
       />
-      <main className="padding responsive">
+      <main className="padding">
         <nav>
           <Link
             to="/setting/config-plugin/config/$type/$id/$pluginId"
