@@ -1,9 +1,10 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useLiveQuery } from "dexie-react-hooks";
 import { match } from "ts-pattern";
 import { ConfigForm } from "~/components/ConfigForm";
 import { Navbar } from "~/components/Navbar";
 import { db, type PluginHolder, type PluginInfo } from "~/utils/db";
+import { PATH_NAME } from "~/utils/ui-utils";
 
 function EditPluginConfig() {
   const { type, id, pluginId } = Route.useParams();
@@ -24,22 +25,10 @@ function EditPluginConfig() {
       .otherwise(() => undefined);
     return host ? { type: "host", host } : undefined;
   }, [type, id]);
-  const navigate = useNavigate();
 
   if (!plugin || !parent) {
     return <div>Loading...</div>;
   }
-
-  const afterSubmit = () => {
-    match(type)
-      .with("plugin", () => navigate({ to: "/setting/plugin" }))
-      .otherwise(() =>
-        navigate({
-          to: "/setting/config-plugin/list/$type/$id",
-          params: { type, id },
-        }),
-      );
-  };
 
   const globalConfig =
     parent.type === "plugin"
@@ -73,13 +62,20 @@ function EditPluginConfig() {
         }
       />
       <main className="vertical">
-        正在配置 {plugin.name} for{" "}
-        {parent.type === "plugin" ? parent.plugin.name : parent.host.name}
+        {match(parent)
+          .with({ type: "plugin" }, () => `正在配置${plugin.name}的全局配置`)
+          .with(
+            { type: "host" },
+            ({ host }) =>
+              `正在配置${PATH_NAME[type as keyof typeof PATH_NAME]}
+            【${host.name}】的插件【${plugin.name}】`,
+          )
+          .exhaustive()}
         <ConfigForm
+          key={pluginId}
           configSchema={plugin.configSchema}
           initialValues={globalConfig as any}
           onSave={onSave}
-          afterSubmit={afterSubmit}
         />
       </main>
     </>

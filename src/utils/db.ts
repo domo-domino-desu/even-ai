@@ -9,6 +9,7 @@ export type Uuid = string;
 export interface PluginInfo<TSchema extends ConfigSchema> {
   id: Uuid;
   name: string;
+  source?: string; // Optional source URL for the plugin
   tags: string[];
   description: string;
   configSchema: TSchema;

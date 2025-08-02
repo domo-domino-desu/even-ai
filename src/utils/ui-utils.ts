@@ -29,9 +29,9 @@ export function useBeerActive(show: boolean) {
   return { isActive, isShown };
 }
 
-export const name = {
+export const PATH_NAME = {
   chat: "对话",
   provider: "模型提供者",
   prefab: "预组",
   plugin: "插件",
-};
+} as const;

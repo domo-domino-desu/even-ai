@@ -1,12 +1,14 @@
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useLiveQuery } from "dexie-react-hooks";
+import toast from "react-hot-toast";
 import { Navbar } from "~/components/Navbar";
 import { db, type Prefab } from "~/utils/db";
 import { insertMockPrefabs } from "~/utils/mock-data";
 
 function deletePrefab(prefabId: string) {
   db.prefabs.delete(prefabId).catch((error) => {
+    toast.error("删除预组失败");
     console.error("Failed to delete prefab:", error);
   });
 }

@@ -1,6 +1,7 @@
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useLiveQuery } from "dexie-react-hooks";
+import toast from "react-hot-toast";
 import { Navbar } from "~/components/Navbar";
 import type { ConfigSchema } from "~/utils/ai/plugin";
 import { db, type PluginInfo } from "~/utils/db";
@@ -8,6 +9,7 @@ import { insertMockPlugins } from "~/utils/mock-data";
 
 function deletePlugin(pluginId: string) {
   db.plugins.delete(pluginId).catch((error) => {
+    toast.error("删除插件失败");
     console.error("Failed to delete plugin:", error);
   });
 }
@@ -78,7 +80,7 @@ export function PluginList() {
           </button>
         )}
         <button className="circle transparent">
-          <Link to="/setting/plugin/download">
+          <Link to="/setting/plugin/new">
             <i>download</i>
           </Link>
         </button>

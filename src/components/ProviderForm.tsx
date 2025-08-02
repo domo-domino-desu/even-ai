@@ -1,49 +1,55 @@
-import { useNavigate } from "@tanstack/react-router";
 import { useAtomValue } from "jotai";
 import { useState } from "react";
-import { v7 as uuid } from "uuid";
-import { cryptoManagerAtom } from "~/state/crypto";
+import { match } from "ts-pattern";
+
+import { StringInput } from "~/components/beer-input/StringInput";
+import { cryptoInfoAtom, cryptoManagerAtom } from "~/state/crypto";
 import { PROVIDER_INFO, type ProviderType } from "~/utils/ai/provider";
-import { db, type Provider } from "~/utils/db";
-import { StringInput } from "./beer-input/StringInput";
+import { type Provider } from "~/utils/db";
+
+const defaultValues = {
+  name: "请填写名称",
+  description: "请填写描述",
+  tags: [],
+  providerType: "openai" as ProviderType,
+  baseURL: PROVIDER_INFO["openai"].defaultURL,
+  encryptedApiKey: "...",
+  model: "gpt-3.5-turbo",
+  providerSettings: {},
+  plugins: {},
+};
 
 export function ProviderForm({
   provider,
   isNew,
+  onSave,
   afterSubmit,
 }: {
   provider?: Provider;
   isNew: boolean;
+  onSave: (provider: Omit<Provider, "id">) => Promise<any>;
   afterSubmit?: () => void;
 }) {
-  const cryptoAtom = useAtomValue(cryptoManagerAtom);
-  const navigate = useNavigate();
-  const [state, setState] = useState(
-    provider ?? {
-      name: "",
-      description: "",
-      tags: [],
-      providerType: "openai" as ProviderType,
-      baseURL: "",
-      encryptedApiKey: "",
-      model: "",
-      providerSettings: {},
-      plugins: {},
-    },
-  );
+  const cryptoInfo = useAtomValue(cryptoInfoAtom);
+  const cryptoManager = useAtomValue(cryptoManagerAtom);
+  const [keyEdited, setKeyEdited] = useState(false);
+  const [state, setState] = useState(provider ?? defaultValues);
+
+  const hiddenKey = match(cryptoInfo!.type)
+    .with("raw", () => state.encryptedApiKey)
+    .with("encrypted", () => "[密码已保存]")
+    .exhaustive();
+  const shownKey = keyEdited ? state.encryptedApiKey : hiddenKey;
 
   async function handleSubmit() {
-    if (provider) {
-      await db.ai_providers.update(provider.id, {
-        id: provider.id,
-        ...state,
-        encryptedApiKey: await cryptoAtom!.encrypt(state.encryptedApiKey),
-      });
-    } else {
-      await db.ai_providers.add({ id: uuid(), ...state });
+    let encryptedApiKey = state.encryptedApiKey;
+    if (keyEdited && cryptoManager) {
+      encryptedApiKey = await cryptoManager.encrypt(state.encryptedApiKey);
+      setKeyEdited(false);
+      setState((prev) => ({ ...prev, encryptedApiKey }));
     }
+    onSave({ ...state, encryptedApiKey });
     afterSubmit?.();
-    navigate({ to: "/setting/provider" });
   }
 
   return (
@@ -77,17 +83,35 @@ export function ProviderForm({
       />
       <StringInput
         label="API Key"
-        value={state.encryptedApiKey}
-        onChange={(value) =>
-          setState((prev) => ({ ...prev, encryptedApiKey: value }))
-        }
+        value={shownKey}
+        onChange={(value) => {
+          setKeyEdited(true);
+          setState((prev) => ({ ...prev, encryptedApiKey: value }));
+        }}
       />
       <StringInput
         label="Model"
         value={state.model}
         onChange={(value) => setState((prev) => ({ ...prev, model: value }))}
       />
+      <StringInput
+        label="描述"
+        value={state.description}
+        onChange={(value) =>
+          setState((prev) => ({ ...prev, description: value }))
+        }
+      />
       <nav className="right-align">
+        {import.meta.env.DEV && (
+          <button
+            className="border"
+            onClick={async () =>
+              console.log(await cryptoManager?.decrypt(state.encryptedApiKey))
+            }
+          >
+            <i>bug_report</i>
+          </button>
+        )}
         <button onClick={handleSubmit}>{isNew ? "创建" : "保存"}</button>
       </nav>
     </>

@@ -25,7 +25,6 @@ import { Route as MainSettingPrefabNewRouteImport } from './routes/_main.setting
 import { Route as MainSettingPrefabDownloadRouteImport } from './routes/_main.setting.prefab.download'
 import { Route as MainSettingPrefabIdRouteImport } from './routes/_main.setting.prefab.$id'
 import { Route as MainSettingPluginNewRouteImport } from './routes/_main.setting.plugin.new'
-import { Route as MainSettingPluginDownloadRouteImport } from './routes/_main.setting.plugin.download'
 import { Route as MainSettingPluginIdRouteImport } from './routes/_main.setting.plugin.$id'
 import { Route as MainSettingImportPrefabTypeIdRouteImport } from './routes/_main.setting.import-prefab.$type.$id'
 import { Route as MainSettingConfigPluginListTypeIdRouteImport } from './routes/_main.setting.config-plugin.list.$type.$id'
@@ -112,12 +111,6 @@ const MainSettingPluginNewRoute = MainSettingPluginNewRouteImport.update({
   path: '/setting/plugin/new',
   getParentRoute: () => MainRoute,
 } as any)
-const MainSettingPluginDownloadRoute =
-  MainSettingPluginDownloadRouteImport.update({
-    id: '/setting/plugin/download',
-    path: '/setting/plugin/download',
-    getParentRoute: () => MainRoute,
-  } as any)
 const MainSettingPluginIdRoute = MainSettingPluginIdRouteImport.update({
   id: '/setting/plugin/$id',
   path: '/setting/plugin/$id',
@@ -150,7 +143,6 @@ export interface FileRoutesByFullPath {
   '/log': typeof MainLogIndexRoute
   '/setting': typeof MainSettingIndexRoute
   '/setting/plugin/$id': typeof MainSettingPluginIdRoute
-  '/setting/plugin/download': typeof MainSettingPluginDownloadRoute
   '/setting/plugin/new': typeof MainSettingPluginNewRoute
   '/setting/prefab/$id': typeof MainSettingPrefabIdRoute
   '/setting/prefab/download': typeof MainSettingPrefabDownloadRoute
@@ -172,7 +164,6 @@ export interface FileRoutesByTo {
   '/log': typeof MainLogIndexRoute
   '/setting': typeof MainSettingIndexRoute
   '/setting/plugin/$id': typeof MainSettingPluginIdRoute
-  '/setting/plugin/download': typeof MainSettingPluginDownloadRoute
   '/setting/plugin/new': typeof MainSettingPluginNewRoute
   '/setting/prefab/$id': typeof MainSettingPrefabIdRoute
   '/setting/prefab/download': typeof MainSettingPrefabDownloadRoute
@@ -196,7 +187,6 @@ export interface FileRoutesById {
   '/_main/log/': typeof MainLogIndexRoute
   '/_main/setting/': typeof MainSettingIndexRoute
   '/_main/setting/plugin/$id': typeof MainSettingPluginIdRoute
-  '/_main/setting/plugin/download': typeof MainSettingPluginDownloadRoute
   '/_main/setting/plugin/new': typeof MainSettingPluginNewRoute
   '/_main/setting/prefab/$id': typeof MainSettingPrefabIdRoute
   '/_main/setting/prefab/download': typeof MainSettingPrefabDownloadRoute
@@ -220,7 +210,6 @@ export interface FileRouteTypes {
     | '/log'
     | '/setting'
     | '/setting/plugin/$id'
-    | '/setting/plugin/download'
     | '/setting/plugin/new'
     | '/setting/prefab/$id'
     | '/setting/prefab/download'
@@ -242,7 +231,6 @@ export interface FileRouteTypes {
     | '/log'
     | '/setting'
     | '/setting/plugin/$id'
-    | '/setting/plugin/download'
     | '/setting/plugin/new'
     | '/setting/prefab/$id'
     | '/setting/prefab/download'
@@ -265,7 +253,6 @@ export interface FileRouteTypes {
     | '/_main/log/'
     | '/_main/setting/'
     | '/_main/setting/plugin/$id'
-    | '/_main/setting/plugin/download'
     | '/_main/setting/plugin/new'
     | '/_main/setting/prefab/$id'
     | '/_main/setting/prefab/download'
@@ -398,13 +385,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MainSettingPluginNewRouteImport
       parentRoute: typeof MainRoute
     }
-    '/_main/setting/plugin/download': {
-      id: '/_main/setting/plugin/download'
-      path: '/setting/plugin/download'
-      fullPath: '/setting/plugin/download'
-      preLoaderRoute: typeof MainSettingPluginDownloadRouteImport
-      parentRoute: typeof MainRoute
-    }
     '/_main/setting/plugin/$id': {
       id: '/_main/setting/plugin/$id'
       path: '/setting/plugin/$id'
@@ -444,7 +424,6 @@ interface MainRouteChildren {
   MainLogIndexRoute: typeof MainLogIndexRoute
   MainSettingIndexRoute: typeof MainSettingIndexRoute
   MainSettingPluginIdRoute: typeof MainSettingPluginIdRoute
-  MainSettingPluginDownloadRoute: typeof MainSettingPluginDownloadRoute
   MainSettingPluginNewRoute: typeof MainSettingPluginNewRoute
   MainSettingPrefabIdRoute: typeof MainSettingPrefabIdRoute
   MainSettingPrefabDownloadRoute: typeof MainSettingPrefabDownloadRoute
@@ -467,7 +446,6 @@ const MainRouteChildren: MainRouteChildren = {
   MainLogIndexRoute: MainLogIndexRoute,
   MainSettingIndexRoute: MainSettingIndexRoute,
   MainSettingPluginIdRoute: MainSettingPluginIdRoute,
-  MainSettingPluginDownloadRoute: MainSettingPluginDownloadRoute,
   MainSettingPluginNewRoute: MainSettingPluginNewRoute,
   MainSettingPrefabIdRoute: MainSettingPrefabIdRoute,
   MainSettingPrefabDownloadRoute: MainSettingPrefabDownloadRoute,

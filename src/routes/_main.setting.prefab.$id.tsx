@@ -32,7 +32,14 @@ function EditPrefab() {
           </Link>
         </div>
         <Gap h={3} />
-        <PrefabForm key={prefab?.id} prefab={prefab} isNew={false} />
+        <PrefabForm
+          key={prefab?.id}
+          prefab={prefab}
+          isNew={false}
+          onSave={async (p) => {
+            await db.prefabs.update(id, p);
+          }}
+        />
       </main>
     </>
   );

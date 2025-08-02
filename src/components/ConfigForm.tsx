@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { match } from "ts-pattern";
 
+import { BooleanInput } from "~/components/beer-input/BooleanInput";
+import { NumberInput } from "~/components/beer-input/NumberInput";
+import { StringInput } from "~/components/beer-input/StringInput";
 import { Gap } from "~/components/Gap";
 import type { ConfigFromSchema, ConfigSchema } from "~/utils/ai/plugin";
-import { BooleanInput } from "./beer-input/BooleanInput";
-import { NumberInput } from "./beer-input/NumberInput";
-import { StringInput } from "./beer-input/StringInput";
 
 export function ConfigForm<TSchema extends ConfigSchema>({
   configSchema,
@@ -46,6 +46,11 @@ export function ConfigForm<TSchema extends ConfigSchema>({
 
   function isAble<T extends keyof TSchema>(key: T): boolean {
     return state[key] !== undefined;
+  }
+
+  async function handleSubmit() {
+    onSave(state);
+    afterSubmit?.();
   }
 
   if (!configSchema) {
@@ -134,14 +139,7 @@ export function ConfigForm<TSchema extends ConfigSchema>({
       </table>
       <Gap h={2} />
       <nav className="right-align">
-        <button
-          onClick={() => {
-            onSave(state);
-            afterSubmit?.();
-          }}
-        >
-          保存配置
-        </button>
+        <button onClick={handleSubmit}>保存配置</button>
       </nav>
     </main>
   );

@@ -1,6 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { v7 as uuid } from "uuid";
 import { Navbar } from "~/components/Navbar";
 import { PrefabForm } from "~/components/PrefabForm";
+import { db } from "~/utils/db";
 
 function NewPrefab() {
   return (
@@ -11,7 +13,12 @@ function NewPrefab() {
         navigationFallback={(go) => go({ to: "/setting/prefab" })}
       />
       <main className="padding">
-        <PrefabForm isNew />
+        <PrefabForm
+          isNew
+          onSave={async (prefab) => {
+            await db.prefabs.add({ ...prefab, id: uuid() });
+          }}
+        />
       </main>
     </>
   );

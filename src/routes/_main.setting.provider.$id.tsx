@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useLiveQuery } from "dexie-react-hooks";
+
 import { Gap } from "~/components/Gap";
 import { Navbar } from "~/components/Navbar";
 import { ProviderForm } from "~/components/ProviderForm";
@@ -32,7 +33,14 @@ function EditProvider() {
           </Link>
         </div>
         <Gap h={3} />
-        <ProviderForm key={provider?.id} provider={provider} isNew={false} />
+        <ProviderForm
+          key={provider?.id}
+          provider={provider}
+          isNew={false}
+          onSave={async (provider) => {
+            await db.ai_providers.update(id, provider);
+          }}
+        />
       </main>
     </>
   );

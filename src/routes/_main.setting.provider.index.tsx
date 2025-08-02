@@ -1,12 +1,14 @@
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useLiveQuery } from "dexie-react-hooks";
+import toast from "react-hot-toast";
 import { Navbar } from "~/components/Navbar";
 import { db, type Provider } from "~/utils/db";
 import { insertMockProviders } from "~/utils/mock-data";
 
 function deleteProvider(providerId: string) {
   db.ai_providers.delete(providerId).catch((error) => {
+    toast.error("删除模型提供者失败");
     console.error("Failed to delete provider:", error);
   });
 }

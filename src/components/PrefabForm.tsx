@@ -1,36 +1,31 @@
-import { useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { v7 as uuid } from "uuid";
-import { db, type Prefab } from "~/utils/db";
-import { StringInput } from "./beer-input/StringInput";
+
+import { StringInput } from "~/components/beer-input/StringInput";
+import { type Prefab } from "~/utils/db";
+
+const defaultValues = {
+  name: "请填写名称",
+  description: "请填写描述",
+  tags: [],
+  plugins: {},
+};
 
 export function PrefabForm({
   prefab,
   isNew,
+  onSave,
   afterSubmit,
 }: {
   prefab?: Prefab;
   isNew: boolean;
+  onSave: (prefab: Omit<Prefab, "id">) => Promise<any>;
   afterSubmit?: () => void;
 }) {
-  const navigate = useNavigate();
-  const [state, setState] = useState(
-    prefab ?? {
-      name: "",
-      description: "",
-      tags: [],
-      plugins: {},
-    },
-  );
+  const [state, setState] = useState(prefab ?? defaultValues);
 
   async function handleSubmit() {
-    if (prefab) {
-      await db.prefabs.update(prefab.id, { ...state });
-    } else {
-      await db.prefabs.add({ id: uuid(), ...state });
-    }
+    await onSave(state);
     afterSubmit?.();
-    navigate({ to: "/setting/prefab" });
   }
 
   return (

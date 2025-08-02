@@ -30,7 +30,12 @@ function EditPlugin() {
           </Link>
         </nav>
         <Gap h={3} />
-        <PluginForm initialValues={plugin} />
+        <PluginForm
+          initialValues={plugin}
+          onSave={async (pluginInfo) => {
+            await db.plugins.update(id, { ...pluginInfo });
+          }}
+        />
       </main>
     </>
   );

@@ -3,6 +3,7 @@ import { useCallback } from "react";
 
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { useLiveQuery } from "dexie-react-hooks";
+import toast from "react-hot-toast";
 
 import { Gap } from "~/components/Gap";
 import { Navbar } from "~/components/Navbar";
@@ -11,6 +12,7 @@ import { insertMockChats } from "~/utils/mock-data";
 
 function deleteChat(chatId: string) {
   db.chats.delete(chatId).catch((error) => {
+    toast.error("删除聊天失败");
     console.error("Failed to delete chat:", error);
   });
 }
