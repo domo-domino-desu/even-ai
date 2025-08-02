@@ -38,6 +38,7 @@ export type ConfigFromSchema<TSchema extends ConfigSchema> = {
 
 export interface Plugin<TSchema extends ConfigSchema> {
   name: string;
+  source?: string;
   description: string;
   /**
    * Configuration schema for the extension.

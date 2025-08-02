@@ -1,5 +1,4 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useCallback } from "react";
 
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { useLiveQuery } from "dexie-react-hooks";
@@ -21,35 +20,27 @@ function ChatCard({ chat }: { chat: Chat }) {
   const navigate = useNavigate({ from: "/chat" });
   const lastMessage = chat.history.messages[chat.history.messages.length - 1];
 
-  const handleEdit = useCallback(
-    (e: React.MouseEvent) => {
-      e.stopPropagation();
-      navigate({
-        to: "/setting/config-plugin/list/$type/$id",
-        params: { type: "chat", id: chat.id },
-      });
-    },
-    [chat.id, navigate],
-  );
-
-  const handleDelete = useCallback(
-    (e: React.MouseEvent) => {
-      e.stopPropagation();
-      deleteChat(chat.id);
-    },
-    [chat.id],
-  );
-
   return (
     <article
       onClick={() => navigate({ to: "/chat/$id", params: { id: chat.id } })}
     >
       <nav>
         <h6 className="max">{chat.name}</h6>
-        <button className="circle transparent" onClick={handleEdit}>
-          <i>edit</i>
+        <button className="circle transparent">
+          <Link
+            to="/setting/config-plugin/list/$type/$id"
+            params={{ type: "chat", id: chat.id }}
+          >
+            <i>edit</i>
+          </Link>
         </button>
-        <button className="circle transparent" onClick={handleDelete}>
+        <button
+          className="circle transparent"
+          onClick={(e: React.MouseEvent) => {
+            e.stopPropagation();
+            deleteChat(chat.id);
+          }}
+        >
           <i>delete</i>
         </button>
       </nav>

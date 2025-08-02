@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useState } from "react";
 
 import { javascript } from "@codemirror/lang-javascript";
 import toast from "react-hot-toast";
@@ -6,7 +6,7 @@ import { v7 as uuid } from "uuid";
 
 import { StringInput } from "~/components//beer-input/StringInput";
 import { Gap } from "~/components/Gap";
-import type { ConfigSchema, Plugin } from "~/utils/ai/plugin";
+import type { ConfigSchema } from "~/utils/ai/plugin";
 import { loadPluginFromString } from "~/utils/ai/plugin-utils";
 import { type PluginInfo } from "~/utils/db";
 
@@ -52,19 +52,15 @@ export function PluginForm<TSchema extends ConfigSchema>({
     afterSubmit?.();
   }
 
-  const updateContent = useCallback(
-    (plugin: Plugin<TSchema>) => ({
-      configSchema: plugin.configSchema,
-      description: plugin.description,
-      name: plugin.name,
-    }),
-    [],
-  );
-
   async function loadAndApplyPluginInfo() {
     try {
       const plugin = await loadPluginFromString<TSchema>(state.content);
-      const infoFromContent = updateContent(plugin);
+      const infoFromContent = {
+        name: plugin.name,
+        source: plugin.source,
+        configSchema: plugin.configSchema,
+        description: plugin.description,
+      };
       setState((prev) => ({ ...prev, ...infoFromContent }));
       return infoFromContent;
     } catch (error) {
