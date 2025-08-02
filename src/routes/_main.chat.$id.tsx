@@ -47,35 +47,35 @@ function NotFound() {
 }
 
 function Message({ message }: { message: Message }) {
-  const navStyle = clsx("small-margin horizontal-margin top-align");
-  const bubbleStyle = "border un-max-w-5xl left-align";
+  const bubbleStyle = "border";
 
   return match(message)
     .with({ role: "user" }, (msg) => (
-      <nav className={clsx(navStyle, "right-align")}>
+      <>
+        <nav className={clsx("right-align")}>
+          <div className="datetime">{msg.datetime}</div>
+          <i className="large">person</i>
+        </nav>
         <article className={bubbleStyle}>
           <div className="content">{msg.content}</div>
-          <div className="datetime">{msg.datetime}</div>
         </article>
-        <i className="large">person</i>
-      </nav>
+      </>
     ))
     .with({ role: "assistant" }, (msg) => (
-      <nav className={clsx(navStyle, "left-align")}>
-        <i className="large">robot</i>
+      <>
+        <nav className={clsx("left-align")}>
+          <i className="large">robot</i>
+          <div className="datetime">{msg.datetime}</div>
+        </nav>
         <article className={bubbleStyle}>
           <div className="content">{msg.content}</div>
-          <div className="datetime">{msg.datetime}</div>
         </article>
-      </nav>
+      </>
     ))
     .with({ role: "system" }, (msg) => (
-      <nav className={clsx(navStyle, "middle-align")}>
-        <article className="border max left-align">
-          <div className="content">{msg.content}</div>
-          <div className="datetime">{msg.datetime}</div>
-        </article>
-      </nav>
+      <article className={bubbleStyle}>
+        <div className="content">{msg.content}</div>
+      </article>
     ))
     .exhaustive();
 }
@@ -137,10 +137,11 @@ function Chat() {
       {chat !== null &&
         (chat ? (
           <main className="no-padding responsive" ref={container}>
-            <div />
-            {chat?.history?.messages?.map((message) => (
-              <Message key={message.id} message={message} />
-            ))}
+            <div className="padding">
+              {chat?.history?.messages?.map((message) => (
+                <Message key={message.id} message={message} />
+              ))}
+            </div>
             <div
               className={
                 bottomSize && `un-h-[calc(${bottomSize?.height}px+1rem)]`

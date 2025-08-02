@@ -1,5 +1,7 @@
 import { useCanGoBack, useNavigate, useRouter } from "@tanstack/react-router";
+import { useSize } from "ahooks";
 import { clsx } from "clsx";
+import { useRef, useState } from "react";
 import { useBeerSize } from "~/utils/ui-utils";
 
 function getNavStyle(size: ReturnType<typeof useBeerSize>) {
@@ -7,6 +9,7 @@ function getNavStyle(size: ReturnType<typeof useBeerSize>) {
     surface: size.m || size.l,
   });
 }
+
 export function Navbar({
   title,
   children,
@@ -18,15 +21,16 @@ export function Navbar({
   enableBack?: boolean;
   navigationFallback?: (go: ReturnType<typeof useNavigate>) => void;
 }) {
-  const router = useRouter();
-  const go = useNavigate();
-  const canGoBack = useCanGoBack();
   const size = useBeerSize();
+  const container = useRef(null);
+  const go = useNavigate();
+  const router = useRouter();
+  const canGoBack = useCanGoBack();
 
   const showBackButton = enableBack && (canGoBack || navigationFallback);
 
   return (
-    <nav className={getNavStyle(size)}>
+    <nav className={getNavStyle(size)} ref={container}>
       {showBackButton && (
         <button
           className="circle transparent"
@@ -41,8 +45,9 @@ export function Navbar({
           <i>arrow_back</i>
         </button>
       )}
-      <h5>{title}</h5>
-      <div className="max" />
+      <h5 className="un-flex-grow-1! un-min-w-0! un-overflow-hidden! un-text-ellipsis! un-flex-[unset]! un-whitespace-nowrap! un-text-left">
+        {title}
+      </h5>
       {children}
     </nav>
   );

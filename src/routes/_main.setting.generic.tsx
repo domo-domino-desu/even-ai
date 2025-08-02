@@ -9,7 +9,7 @@ function EditPlugin() {
         enableBack
         navigationFallback={(go) => go({ to: "/chat" })}
       />
-      <main className="padding"></main>
+      <main className="paddipadding responsiveng"></main>
     </>
   );
 }

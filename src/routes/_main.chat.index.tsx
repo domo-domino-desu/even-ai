@@ -117,7 +117,7 @@ function ChatList() {
         </button>
       </Navbar>
 
-      <main ref={parent}>
+      <main ref={parent} className="padding responsive">
         {chats !== null &&
           (chats?.length ? (
             chats.map((chat) => <ChatCard key={chat.id} chat={chat} />)

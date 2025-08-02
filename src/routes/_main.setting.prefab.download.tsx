@@ -80,7 +80,7 @@ function DownloadPrefab() {
         enableBack
         navigationFallback={(go) => go({ to: "/setting/prefab" })}
       />
-      <main className="padding">
+      <main className="padding responsive">
         <div className="row">
           <div className="field label border max">
             <input

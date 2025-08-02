@@ -5,7 +5,7 @@ function SettingsPage() {
   return (
     <>
       <Navbar title="设置" />
-      <main className="padding">
+      <main className="padding responsive">
         <article className="border no-padding">
           <ul className="list border">
             <li>

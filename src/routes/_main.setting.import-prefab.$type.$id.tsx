@@ -63,7 +63,7 @@ function ImportPrefab() {
             .otherwise(() => go({ to: "/setting" }))
         }
       />
-      <main className="padding">
+      <main className="padding responsive">
         <div className="card-list">
           {prefabs?.map((prefab) => (
             <article key={prefab.id} onClick={() => handleImport(prefab.id)}>

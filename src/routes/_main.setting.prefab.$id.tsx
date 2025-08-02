@@ -20,7 +20,7 @@ function EditPrefab() {
         enableBack
         navigationFallback={(go) => go({ to: "/setting/prefab" })}
       />
-      <main className="padding">
+      <main className="padding responsive">
         <div className="row">
           <Link
             to="/setting/config-plugin/list/$type/$id"

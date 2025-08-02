@@ -15,7 +15,7 @@ function NewProvider() {
         enableBack
         navigationFallback={(go) => go({ to: "/setting/provider" })}
       />
-      <main className="padding">
+      <main className="padding responsive">
         <ProviderForm
           isNew
           onSave={async (provider) => {

@@ -88,7 +88,7 @@ export function PrefabList() {
           </Link>
         </button>
       </Navbar>
-      <main className="padding" ref={parent}>
+      <main className="padding responsive" ref={parent}>
         {prefabs &&
           (prefabs.length ? (
             prefabs.map((prefab) => (

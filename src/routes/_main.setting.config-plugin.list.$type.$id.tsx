@@ -53,7 +53,7 @@ function PluginList() {
             .otherwise(() => go({ to: "/setting" }))
         }
       />
-      <main className="padding">
+      <main className="padding responsive">
         <table className="striped">
           <thead>
             <tr>

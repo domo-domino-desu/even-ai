@@ -21,7 +21,7 @@ function EditProvider() {
         enableBack
         navigationFallback={(go) => go({ to: "/setting/provider" })}
       />
-      <main className="padding">
+      <main className="padding responsive">
         <div className="row">
           <Link
             to="/setting/config-plugin/list/$type/$id"

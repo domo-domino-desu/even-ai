@@ -90,7 +90,7 @@ export function PluginList() {
           </Link>
         </button>
       </Navbar>
-      <main className="padding" ref={parent}>
+      <main className="padding responsive" ref={parent}>
         {plugins &&
           (plugins.length ? (
             plugins.map((plugin) => (
