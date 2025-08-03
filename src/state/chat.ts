@@ -1,12 +1,10 @@
 import { generateText, streamText } from "ai";
 import { atom } from "jotai";
-import { merge } from "moderndash";
 import { v4 as uuidv4 } from "uuid";
 
 import toast from "react-hot-toast";
 import type { ChatHistory, Message } from "~/utils/ai/chat";
 import {
-  getPluginsFromChat,
   runAnyHooks,
   runInboundHooks,
   runOutboundHooks,
@@ -31,25 +29,7 @@ export const chatAtom = atom(async (get) => {
   const chat = get(rawChatAtom);
   if (!chat) return null;
 
-  const provider = chat.providerId
-    ? await db.ai_providers.get(chat.providerId)
-    : null;
-  const plugins = await getPluginsFromChat(chat);
-
-  const mergedPlugins: Record<string, any> = {};
-  for (const plugin of plugins) {
-    const pluginConfig = plugin.globalConfig ?? {};
-    const providerConfig = provider?.plugins?.[plugin.id] ?? {};
-    const chatConfig = chat.plugins?.[plugin.id] ?? {};
-    mergedPlugins[plugin.id] = merge(
-      {},
-      pluginConfig,
-      providerConfig,
-      chatConfig,
-    );
-  }
-
-  return { ...chat, plugins: mergedPlugins };
+  return { ...chat };
 });
 
 export const userInputAtom = atom<string>("");

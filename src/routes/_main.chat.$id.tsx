@@ -8,7 +8,7 @@ import {
 import { useSize } from "ahooks";
 import { clsx } from "clsx";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
-import { Suspense, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { match } from "ts-pattern";
 
 import { FlexStringInput } from "~/components/beer-input/FlexStringInput";
