@@ -2,6 +2,7 @@ import { useAtomValue } from "jotai";
 import { useState } from "react";
 import { match } from "ts-pattern";
 
+import { BooleanInput } from "~/components/beer-input/BooleanInput";
 import { StringInput } from "~/components/beer-input/StringInput";
 import { cryptoInfoAtom, cryptoManagerAtom } from "~/state/crypto";
 import { PROVIDER_INFO, type ProviderType } from "~/utils/ai/provider";
@@ -16,6 +17,7 @@ const defaultValues = {
   baseURL: PROVIDER_INFO["openai"].defaultURL,
   encryptedApiKey: "...",
   model: "gpt-3.5-turbo",
+  isStreaming: true,
   providerSettings: {},
   plugins: {},
 };
@@ -94,6 +96,13 @@ export function ProviderForm({
         label="Model"
         value={state.model}
         onChange={(value) => setState((prev) => ({ ...prev, model: value }))}
+      />
+      <BooleanInput
+        label="流式输出"
+        value={state.isStreaming}
+        onChange={(value) =>
+          setState((prev) => ({ ...prev, isStreaming: value }))
+        }
       />
       <StringInput
         label="描述"

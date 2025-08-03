@@ -1,10 +1,11 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { v7 as uuid } from "uuid";
 import { Navbar } from "~/components/Navbar";
 import { PrefabForm } from "~/components/PrefabForm";
 import { db } from "~/utils/db";
 
 function NewPrefab() {
+  const navigate = useNavigate({ from: "/setting/prefab/new" });
   return (
     <>
       <Navbar
@@ -18,6 +19,7 @@ function NewPrefab() {
           onSave={async (prefab) => {
             await db.prefabs.add({ ...prefab, id: uuid() });
           }}
+          afterSubmit={() => navigate({ to: "/setting/prefab" })}
         />
       </main>
     </>

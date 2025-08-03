@@ -21,7 +21,7 @@ function ImportPrefab() {
         id: uuid(),
         name: selectedPrefab.name,
         tags: selectedPrefab.tags,
-        history: { messages: [] },
+        history: { messages: [], _metadata: {} },
         createdAt: now,
         updatedAt: now,
         plugins: selectedPrefab.plugins,

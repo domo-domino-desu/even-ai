@@ -88,71 +88,21 @@ export function insertMockPrefabs() {
 }
 
 export async function insertMockPlugins() {
-  const pluginContent1 = `export default createPlugin({
-  name: "网页浏览器",
-  description: "提供网页浏览功能",
-  configSchema: {
-    proxy: {
-      type: "string",
-      default: "",
-      description: "代理服务器地址",
-    },
-    timeout: {
-      type: "number",
-      default: 30000,
-      description: "请求超时时间 (ms)",
-    },
-    enableJavascript: {
-      type: "boolean",
-      default: true,
-      description: "是否执行 JavaScript",
-    },
-  },
-  inboundHooks: [],
-  outboundHooks: [],
-  anyHooks: [],
-  additionalComponents: {},
-});
-`;
-  const pluginContent2 = `export default createPlugin({
-  name: "代码解释器",
-  description: "提供代码解释和执行功能",
-  configSchema: {},
-  inboundHooks: [],
-  outboundHooks: [],
-  anyHooks: [],
-  additionalComponents: {},
-});
-`;
+  const pluginContent1 = (await import("./test-plugins/greeting.js?raw"))
+    .default;
+  const pluginContent2 = (await import("./test-plugins/test-outbound.js?raw"))
+    .default;
   const plugin1 = (await loadPluginFromString(pluginContent1)) as PluginInfo<{
-    proxy: { type: "string"; default: ""; description: "代理服务器地址" };
-    timeout: {
-      type: "number";
-      default: 30000;
-      description: "请求超时时间 (ms)";
-    };
-    enableJavascript: {
-      type: "boolean";
-      default: true;
-      description: "是否执行 JavaScript";
+    content: {
+      type: "string";
+      default: "你是一个专业的AI助手，帮助用户完成各种任务。";
+      description: "提示词内容";
     };
   }>;
   const plugin2 = (await loadPluginFromString(
     pluginContent2,
   )) as PluginInfo<{}>;
-  const pluginSave1: PluginInfo<{
-    proxy: { type: "string"; default: ""; description: "代理服务器地址" };
-    timeout: {
-      type: "number";
-      default: 30000;
-      description: "请求超时时间 (ms)";
-    };
-    enableJavascript: {
-      type: "boolean";
-      default: true;
-      description: "是否执行 JavaScript";
-    };
-  }> = {
+  const pluginSave1 = {
     id: uuid(),
     tags: [],
     name: plugin1.name,

@@ -10,18 +10,16 @@ export interface ProviderSettings {
   apiKey: string;
 }
 
-type AiConstructor = (settings: ProviderSettings) => ProviderV2;
-
 export const SUPPORTED_PROVIDERS = ["openai", "gemini"] as const;
 export const PROVIDER_INFO = {
   openai: {
     defaultURL: "https://api.openai.com/v1",
-    constructor: createOpenAI as AiConstructor,
+    constructor: createOpenAI,
     urlTip: "预期以v1结尾",
   },
   gemini: {
     defaultURL: "https://generativeai.googleapis.com/v1beta",
-    constructor: createGoogleGenerativeAI as AiConstructor,
+    constructor: createGoogleGenerativeAI,
     urlTip: "预期以v1beta结尾",
   },
 };
@@ -44,4 +42,19 @@ export function createProvider(providerSettings: ProviderSettings) {
   const client = providerInfo.constructor(providerSettings);
   clientCache.set(key, client);
   return client;
+}
+
+export function getModel(
+  provider: ReturnType<typeof createProvider>,
+  providerType: ProviderType,
+  model: string,
+) {
+  if (providerType === "openai") {
+    return (provider as ReturnType<typeof createOpenAI>).chat(model);
+  } else if (providerType === "gemini") {
+    return (
+      provider as ReturnType<typeof createGoogleGenerativeAI>
+    ).languageModel(model);
+  }
+  throw new Error(`Unsupported provider type: ${providerType}`);
 }

@@ -1,11 +1,12 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { v7 as uuid } from "uuid";
 
 import { Navbar } from "~/components/Navbar";
 import { PluginForm } from "~/components/PluginForm";
 import { db } from "~/utils/db";
 
-function DownloadPlugin() {
+function NewPlugin() {
+  const navigate = useNavigate({ from: "/setting/plugin/new" });
   return (
     <>
       <Navbar
@@ -19,6 +20,7 @@ function DownloadPlugin() {
           onSave={async (pluginInfo) => {
             await db.plugins.add({ ...pluginInfo, id: uuid() });
           }}
+          afterSubmit={() => navigate({ to: "/setting/plugin" })}
         />
       </main>
     </>
@@ -26,5 +28,5 @@ function DownloadPlugin() {
 }
 
 export const Route = createFileRoute("/_main/setting/plugin/new")({
-  component: DownloadPlugin,
+  component: NewPlugin,
 });

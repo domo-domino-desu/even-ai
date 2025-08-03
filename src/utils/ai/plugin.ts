@@ -85,7 +85,7 @@ export interface Plugin<TSchema extends ConfigSchema> {
    * Allow extension to modify the source-of-truth chat history.
    */
   anyHooks?: {
-    event: "afterPageEnter" | "afterFinishReceive" | "afterUserMessage";
+    event: "after-page-enter" | "after-receive" | "after-send";
     /**
      * This handler will be called when the specified event occurs. The result will be used as the new source-of-truth chat history.
      * @param chat The source-of-truth chat history.

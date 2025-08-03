@@ -26,6 +26,7 @@ import { Route as MainSettingPrefabDownloadRouteImport } from './routes/_main.se
 import { Route as MainSettingPrefabIdRouteImport } from './routes/_main.setting.prefab.$id'
 import { Route as MainSettingPluginNewRouteImport } from './routes/_main.setting.plugin.new'
 import { Route as MainSettingPluginIdRouteImport } from './routes/_main.setting.plugin.$id'
+import { Route as MainChatSelectProviderIdRouteImport } from './routes/_main.chat.select-provider.$id'
 import { Route as MainSettingImportPrefabTypeIdRouteImport } from './routes/_main.setting.import-prefab.$type.$id'
 import { Route as MainSettingConfigPluginListTypeIdRouteImport } from './routes/_main.setting.config-plugin.list.$type.$id'
 import { Route as MainSettingConfigPluginConfigTypeIdPluginIdRouteImport } from './routes/_main.setting.config-plugin.config.$type.$id.$pluginId'
@@ -116,6 +117,12 @@ const MainSettingPluginIdRoute = MainSettingPluginIdRouteImport.update({
   path: '/setting/plugin/$id',
   getParentRoute: () => MainRoute,
 } as any)
+const MainChatSelectProviderIdRoute =
+  MainChatSelectProviderIdRouteImport.update({
+    id: '/chat/select-provider/$id',
+    path: '/chat/select-provider/$id',
+    getParentRoute: () => MainRoute,
+  } as any)
 const MainSettingImportPrefabTypeIdRoute =
   MainSettingImportPrefabTypeIdRouteImport.update({
     id: '/setting/import-prefab/$type/$id',
@@ -142,6 +149,7 @@ export interface FileRoutesByFullPath {
   '/chat': typeof MainChatIndexRoute
   '/log': typeof MainLogIndexRoute
   '/setting': typeof MainSettingIndexRoute
+  '/chat/select-provider/$id': typeof MainChatSelectProviderIdRoute
   '/setting/plugin/$id': typeof MainSettingPluginIdRoute
   '/setting/plugin/new': typeof MainSettingPluginNewRoute
   '/setting/prefab/$id': typeof MainSettingPrefabIdRoute
@@ -163,6 +171,7 @@ export interface FileRoutesByTo {
   '/chat': typeof MainChatIndexRoute
   '/log': typeof MainLogIndexRoute
   '/setting': typeof MainSettingIndexRoute
+  '/chat/select-provider/$id': typeof MainChatSelectProviderIdRoute
   '/setting/plugin/$id': typeof MainSettingPluginIdRoute
   '/setting/plugin/new': typeof MainSettingPluginNewRoute
   '/setting/prefab/$id': typeof MainSettingPrefabIdRoute
@@ -186,6 +195,7 @@ export interface FileRoutesById {
   '/_main/chat/': typeof MainChatIndexRoute
   '/_main/log/': typeof MainLogIndexRoute
   '/_main/setting/': typeof MainSettingIndexRoute
+  '/_main/chat/select-provider/$id': typeof MainChatSelectProviderIdRoute
   '/_main/setting/plugin/$id': typeof MainSettingPluginIdRoute
   '/_main/setting/plugin/new': typeof MainSettingPluginNewRoute
   '/_main/setting/prefab/$id': typeof MainSettingPrefabIdRoute
@@ -209,6 +219,7 @@ export interface FileRouteTypes {
     | '/chat'
     | '/log'
     | '/setting'
+    | '/chat/select-provider/$id'
     | '/setting/plugin/$id'
     | '/setting/plugin/new'
     | '/setting/prefab/$id'
@@ -230,6 +241,7 @@ export interface FileRouteTypes {
     | '/chat'
     | '/log'
     | '/setting'
+    | '/chat/select-provider/$id'
     | '/setting/plugin/$id'
     | '/setting/plugin/new'
     | '/setting/prefab/$id'
@@ -252,6 +264,7 @@ export interface FileRouteTypes {
     | '/_main/chat/'
     | '/_main/log/'
     | '/_main/setting/'
+    | '/_main/chat/select-provider/$id'
     | '/_main/setting/plugin/$id'
     | '/_main/setting/plugin/new'
     | '/_main/setting/prefab/$id'
@@ -392,6 +405,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MainSettingPluginIdRouteImport
       parentRoute: typeof MainRoute
     }
+    '/_main/chat/select-provider/$id': {
+      id: '/_main/chat/select-provider/$id'
+      path: '/chat/select-provider/$id'
+      fullPath: '/chat/select-provider/$id'
+      preLoaderRoute: typeof MainChatSelectProviderIdRouteImport
+      parentRoute: typeof MainRoute
+    }
     '/_main/setting/import-prefab/$type/$id': {
       id: '/_main/setting/import-prefab/$type/$id'
       path: '/setting/import-prefab/$type/$id'
@@ -423,6 +443,7 @@ interface MainRouteChildren {
   MainChatIndexRoute: typeof MainChatIndexRoute
   MainLogIndexRoute: typeof MainLogIndexRoute
   MainSettingIndexRoute: typeof MainSettingIndexRoute
+  MainChatSelectProviderIdRoute: typeof MainChatSelectProviderIdRoute
   MainSettingPluginIdRoute: typeof MainSettingPluginIdRoute
   MainSettingPluginNewRoute: typeof MainSettingPluginNewRoute
   MainSettingPrefabIdRoute: typeof MainSettingPrefabIdRoute
@@ -445,6 +466,7 @@ const MainRouteChildren: MainRouteChildren = {
   MainChatIndexRoute: MainChatIndexRoute,
   MainLogIndexRoute: MainLogIndexRoute,
   MainSettingIndexRoute: MainSettingIndexRoute,
+  MainChatSelectProviderIdRoute: MainChatSelectProviderIdRoute,
   MainSettingPluginIdRoute: MainSettingPluginIdRoute,
   MainSettingPluginNewRoute: MainSettingPluginNewRoute,
   MainSettingPrefabIdRoute: MainSettingPrefabIdRoute,

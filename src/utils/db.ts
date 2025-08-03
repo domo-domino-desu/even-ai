@@ -30,6 +30,7 @@ export interface Provider extends PluginHolder {
   baseURL: string;
   encryptedApiKey: string;
   model: string;
+  isStreaming: boolean;
   providerSettings: Record<string, any>;
 }
 

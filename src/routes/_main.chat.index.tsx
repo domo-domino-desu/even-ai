@@ -95,11 +95,11 @@ function ChatList() {
       id: uuid(),
       name: "新对话",
       tags: [],
-      history: { messages: [] },
+      history: { messages: [], _metadata: {} },
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
       plugins: {},
-    };
+    } as Chat;
     db.chats.add(emptyChat).then(() => {
       navigate({ to: "/chat/$id", params: { id: emptyChat.id } });
     });

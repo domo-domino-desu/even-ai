@@ -12,6 +12,6 @@ export interface Message {
 }
 
 export interface ChatHistory {
-  _metadata?: CallSettings & Record<string, any>;
+  _metadata: CallSettings & Record<string, any>;
   messages: Message[];
 }

@@ -7,17 +7,25 @@ import {
 } from "@tanstack/react-router";
 import { useSize } from "ahooks";
 import { clsx } from "clsx";
-
-import { useLiveQuery } from "dexie-react-hooks";
-import { useEffect, useRef, useState } from "react";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
+import { Suspense, useEffect, useRef, useState } from "react";
 import { match } from "ts-pattern";
 
+import { FlexStringInput } from "~/components/beer-input/FlexStringInput";
 import { Gap } from "~/components/Gap";
 import { Navbar } from "~/components/Navbar";
+import {
+  chatAtom,
+  chatIdAtom,
+  deleteMessageAtom,
+  initChatSessionAtom,
+  interruptMessageAtom,
+  isSendingAtom,
+  sendMessageAtom,
+  userInputAtom,
+} from "~/state/chat";
 import type { Message } from "~/utils/ai/chat";
-import { db } from "~/utils/db";
 import { ICON_NAME, useBeerSize } from "~/utils/ui-utils";
-import { FlexStringInput } from "../components/beer-input/FlexStringInput";
 
 function NotFound() {
   const router = useRouter();
@@ -48,12 +56,19 @@ function NotFound() {
 
 function Message({ message }: { message: Message }) {
   const bubbleStyle = "border";
+  const deleteMessage = useSetAtom(deleteMessageAtom);
 
   return match(message)
     .with({ role: "user" }, (msg) => (
       <>
         <nav className={clsx("right-align")}>
           <div className="datetime">{msg.datetime}</div>
+          <button
+            className="transparent circle"
+            onClick={() => deleteMessage(msg.id)}
+          >
+            <i>delete</i>
+          </button>
           <i className="large">person</i>
         </nav>
         <article className={bubbleStyle}>
@@ -66,6 +81,12 @@ function Message({ message }: { message: Message }) {
         <nav className={clsx("left-align")}>
           <i className="large">robot</i>
           <div className="datetime">{msg.datetime}</div>
+          <button
+            className="transparent circle"
+            onClick={() => deleteMessage(msg.id)}
+          >
+            <i>delete</i>
+          </button>
         </nav>
         <article className={bubbleStyle}>
           <div className="content">{msg.content}</div>
@@ -80,18 +101,24 @@ function Message({ message }: { message: Message }) {
     .exhaustive();
 }
 
-function Chat() {
+function ChatCore() {
   const size = useBeerSize();
-
   const { id } = Route.useParams();
-  const chat = useLiveQuery(() => db.chats.get(id), [id], null);
 
-  const [input, setInput] = useState<string>("");
+  const setChatId = useSetAtom(chatIdAtom);
+  const initChat = useSetAtom(initChatSessionAtom);
 
-  // JS hacks to make:
-  // 1. bottom bar share the same width & left position as the messages
-  // 2. messages has a bottom padding equal to the height of the bottom bar
-  // 3. bottom bar is fixed at the bottom of the screen
+  useEffect(() => {
+    setChatId(id);
+    initChat();
+  }, [id, setChatId, initChat]);
+
+  const chat = useAtomValue(chatAtom);
+  const [input, setInput] = useAtom(userInputAtom);
+  const isSending = useAtomValue(isSendingAtom);
+  const sendMessage = useSetAtom(sendMessageAtom);
+  const interruptMessage = useSetAtom(interruptMessageAtom);
+
   const container = useRef<HTMLElement>(null);
   const bottom = useRef<HTMLDivElement>(null);
   const containerSize = useSize(container);
@@ -99,95 +126,118 @@ function Chat() {
   const [left, setLeft] = useState<number | null>(null);
 
   useEffect(() => {
-    // get position
     const rect = container.current?.getBoundingClientRect();
     if (rect?.left) {
       setLeft(rect.left);
     }
   }, [container, containerSize]);
 
+  if (chat === null) {
+    return <NotFound />;
+  }
+
   return (
     <>
       <Navbar
-        title={chat?.name ?? "未找到对话"}
+        title={chat.name}
         enableBack
         navigationFallback={(go) => go({ to: "/chat" })}
       >
-        {chat && (
-          <>
-            <button className="circle transparent">
-              <Link
-                to="/setting/import-prefab/$type/$id"
-                params={{ type: "chat", id }}
-              >
-                <i>{ICON_NAME.provider}</i>
-              </Link>
-            </button>
-            <button className="circle transparent">
-              <Link
-                to="/setting/config-plugin/list/$type/$id"
-                params={{ type: "chat", id }}
-              >
-                <i>{ICON_NAME.plugin}</i>
-              </Link>
-            </button>
-            <button className="circle transparent">
-              <Link
-                to="/setting/import-prefab/$type/$id"
-                params={{ type: "chat", id }}
-              >
-                <i>{ICON_NAME.prefab}</i>
-              </Link>
-            </button>
-          </>
-        )}
+        <button className="circle transparent">
+          <Link to="/chat/select-provider/$id" params={{ id }}>
+            <i>{ICON_NAME.provider}</i>
+          </Link>
+        </button>
+        <button className="circle transparent">
+          <Link
+            to="/setting/config-plugin/list/$type/$id"
+            params={{ type: "chat", id }}
+          >
+            <i>{ICON_NAME.plugin}</i>
+          </Link>
+        </button>
+        <button className="circle transparent">
+          <Link
+            to="/setting/import-prefab/$type/$id"
+            params={{ type: "chat", id }}
+          >
+            <i>{ICON_NAME.prefab}</i>
+          </Link>
+        </button>
       </Navbar>
-      {chat !== null &&
-        (chat ? (
-          <main className="no-padding" ref={container}>
-            <div className="padding">
-              {chat?.history?.messages?.map((message) => (
-                <Message key={message.id} message={message} />
-              ))}
-            </div>
-            <div
-              className={
-                bottomSize && `un-h-[calc(${bottomSize?.height}px+1rem)]`
-              }
+      <main className="no-padding" ref={container}>
+        <div className="padding">
+          {chat?.history?.messages?.map((message) => (
+            <Message key={message.id} message={message} />
+          ))}
+        </div>
+        <div
+          className={bottomSize && `un-h-[calc(${bottomSize?.height}px+1rem)]`}
+        />
+        <div
+          ref={bottom}
+          className={clsx("fixed no-padding", {
+            [`un-left-[${left}px]`]: (size.m || size.l) && left,
+            [`un-w-[${containerSize?.width}px]`]:
+              (size.m || size.l) && containerSize,
+            "un-bottom-0": !size.s,
+            "un-bottom-18 un-w-full": size.s,
+          })}
+        >
+          <nav
+            className={clsx("max bottom-align", {
+              "surface-container small-padding": size.s,
+              "primary-container small-round padding un-mx-2 un-my-4 un-shadow":
+                size.m || size.l,
+            })}
+          >
+            <FlexStringInput
+              inputClass="max round border surface"
+              textareaClass="max round border surface"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
             />
-            <div
-              ref={bottom}
-              className={clsx("fixed no-padding", {
-                [`un-left-[${left}px]`]: (size.m || size.l) && left,
-                [`un-w-[${containerSize?.width}px]`]:
-                  (size.m || size.l) && containerSize,
-                "un-bottom-0": !size.s,
-                "un-bottom-18 un-w-full": size.s,
-              })}
-            >
-              <nav
-                className={clsx("max bottom-align", {
-                  "surface-container small-padding": size.s,
-                  "primary-container small-round padding un-mx-2 un-my-4 un-shadow":
-                    size.m || size.l,
-                })}
+            {isSending ? (
+              <button
+                className={clsx("large", { circle: size.s })}
+                onClick={() => interruptMessage()}
               >
-                <FlexStringInput
-                  inputClass="max round border surface"
-                  textareaClass="max round border surface"
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                />
-                <button className={clsx("large", { circle: size.s })}>
-                  <i>arrow_upward</i>
-                </button>
-              </nav>
-            </div>
-          </main>
-        ) : (
-          <NotFound />
-        ))}
+                <i>stop</i>
+              </button>
+            ) : (
+              <button
+                className={clsx("large", { circle: size.s })}
+                onClick={() => sendMessage()}
+                disabled={!input.trim()}
+              >
+                <i>arrow_upward</i>
+              </button>
+            )}
+          </nav>
+        </div>
+      </main>
     </>
+  );
+}
+
+function Chat() {
+  return (
+    <Suspense
+      fallback={
+        <>
+          <Navbar
+            title="加载中..."
+            enableBack
+            navigationFallback={(go) => go({ to: "/chat" })}
+          />
+          <main className="medium middle-align center-align vertical">
+            <i className="icon loading">progress_activity</i>
+          </main>
+        </>
+      }
+    >
+      <ChatCore />
+    </Suspense>
   );
 }
 
