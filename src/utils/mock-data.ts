@@ -22,6 +22,7 @@ function getMockChat(): Chat {
           datetime: new Date(Date.now() + i * 1000).toISOString(),
         })),
       ],
+      _metadata: {},
     },
     createdAt: now,
     updatedAt: now,
@@ -42,6 +43,7 @@ export function insertMockProviders() {
       tags: ["official"],
       description: "OpenAI official provider",
       providerType: "openai" as const,
+      isStreaming: true,
       baseURL:
         import.meta.env.VITE_OPENAI_BASE_URL || "https://api.openai.com/v1",
       encryptedApiKey: import.meta.env.VITE_OPENAI_API_KEY || "...",
@@ -55,6 +57,7 @@ export function insertMockProviders() {
       tags: ["official"],
       description: "Google AI official provider",
       providerType: "gemini" as const,
+      isStreaming: true,
       baseURL:
         import.meta.env.VITE_GEMINI_BASE_URL ||
         "https://generativeai.googleapis.com/v1beta",

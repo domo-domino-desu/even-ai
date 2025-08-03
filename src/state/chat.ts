@@ -3,9 +3,7 @@ import { atom } from "jotai";
 import { merge } from "moderndash";
 import { v4 as uuidv4 } from "uuid";
 
-import type { OpenAIProvider } from "@ai-sdk/openai";
 import toast from "react-hot-toast";
-import { match } from "ts-pattern";
 import type { ChatHistory, Message } from "~/utils/ai/chat";
 import {
   getPluginsFromChat,

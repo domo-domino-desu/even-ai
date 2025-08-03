@@ -52,9 +52,7 @@ export function getModel(
   if (providerType === "openai") {
     return (provider as ReturnType<typeof createOpenAI>).chat(model);
   } else if (providerType === "gemini") {
-    return (
-      provider as ReturnType<typeof createGoogleGenerativeAI>
-    ).languageModel(model);
+    return provider.languageModel(model);
   }
   throw new Error(`Unsupported provider type: ${providerType}`);
 }

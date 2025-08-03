@@ -46,7 +46,7 @@ export function GateKeeper({ children }: { children?: React.ReactNode }) {
     const manager = await CryptoManager.create("encrypted", password, salt);
     await setCryptoInfo({
       type: "encrypted",
-      salt: arrayBufferToBase64(salt),
+      salt: arrayBufferToBase64(salt.buffer),
       encryptedText: await manager.encrypt(VERIFICATION_TEXT),
     });
     setCryptoManager(manager);

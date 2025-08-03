@@ -1,3 +1,4 @@
+import { merge } from "moderndash";
 import type { Chat, PluginInfo } from "~/utils/db";
 import { db } from "~/utils/db";
 import type { ChatHistory } from "./chat";
@@ -23,15 +24,38 @@ export function getDefaultConfig<TSchema extends ConfigSchema>(
 
 export async function getPluginsFromChat(
   chat: Chat,
-): Promise<PluginInfo<any>[]> {
+): Promise<{ plugin: PluginInfo<any>; config: any }[]> {
+  // const provider = await db.ai_providers.get(chat.providerId ?? "");
+  // const providerPluginIds = Object.keys(provider?.plugins ?? {});
+  // const pluginIds = Object.keys(chat.plugins);
+  // if (pluginIds.length === 0) return [];
+  // return await db.plugins
+  //   .where("id")
+  //   .anyOf(pluginIds.concat(providerPluginIds))
+  //   .toArray();
   const provider = await db.ai_providers.get(chat.providerId ?? "");
   const providerPluginIds = Object.keys(provider?.plugins ?? {});
-  const pluginIds = Object.keys(chat.plugins);
+  const chatPluginIds = Object.keys(chat.plugins);
+  const pluginIds = [...new Set([...providerPluginIds, ...chatPluginIds])];
   if (pluginIds.length === 0) return [];
-  return await db.plugins
-    .where("id")
-    .anyOf(pluginIds.concat(providerPluginIds))
-    .toArray();
+
+  const plugins = await db.plugins.where("id").anyOf(pluginIds).toArray();
+  return plugins.map((plugin) => {
+    const chatConfig = chat.plugins[plugin.id] || {};
+    const providerConfig = provider?.plugins[plugin.id] || {};
+    const globalConfig = plugin.globalConfig || {};
+    const defaultConfig = getDefaultConfig(plugin.configSchema);
+    return {
+      plugin,
+      config: merge(
+        {},
+        defaultConfig,
+        globalConfig,
+        providerConfig,
+        chatConfig,
+      ),
+    };
+  });
 }
 
 async function runHooks<T>(
@@ -44,7 +68,7 @@ async function runHooks<T>(
   const loadedPlugins = await Promise.all(
     plugins.map(async (p) => ({
       ...p,
-      loaded: await loadPluginFromString(p.content),
+      loaded: await loadPluginFromString(p.plugin.content),
     })),
   );
 
@@ -52,7 +76,7 @@ async function runHooks<T>(
     .flatMap((p) =>
       (p.loaded[hookType] || []).map((hook: any) => ({
         ...hook,
-        config: p.globalConfig,
+        config: p.config,
       })),
     )
     .filter(filterFn)

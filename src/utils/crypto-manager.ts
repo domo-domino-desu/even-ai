@@ -28,7 +28,7 @@ export function base64ToArrayBuffer(base64: string): ArrayBuffer {
  * Creates a salt for key derivation.
  * @returns A Uint8Array representing the salt.
  */
-export async function createSalt(): Promise<Uint8Array> {
+export async function createSalt() {
   return window.crypto.getRandomValues(new Uint8Array(16));
 }
 
@@ -60,7 +60,7 @@ export class CryptoManager {
   public static async create(
     encryptionMode: EncryptionMode,
     password?: string,
-    salt?: Uint8Array<ArrayBufferLike>,
+    salt?: Uint8Array<ArrayBuffer>,
     encryptedVerificationText?: string,
   ): Promise<CryptoManager> {
     if (encryptionMode === "raw") {
@@ -84,7 +84,7 @@ export class CryptoManager {
     const derivedKey = await window.crypto.subtle.deriveKey(
       {
         name: "PBKDF2",
-        salt,
+        salt: salt.buffer,
         iterations: PBKDF2_ITERATIONS,
         hash: "SHA-256",
       },
@@ -131,7 +131,7 @@ export class CryptoManager {
       this._key,
       encodedText,
     );
-    const ivBase64 = arrayBufferToBase64(iv);
+    const ivBase64 = arrayBufferToBase64(iv.buffer);
     const encryptedBase64 = arrayBufferToBase64(encryptedBuffer);
     return `${ivBase64}:${encryptedBase64}`;
   }

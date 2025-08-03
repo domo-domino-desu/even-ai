@@ -221,24 +221,7 @@ function ChatCore() {
 }
 
 function Chat() {
-  return (
-    <Suspense
-      fallback={
-        <>
-          <Navbar
-            title="加载中..."
-            enableBack
-            navigationFallback={(go) => go({ to: "/chat" })}
-          />
-          <main className="medium middle-align center-align vertical">
-            <i className="icon loading">progress_activity</i>
-          </main>
-        </>
-      }
-    >
-      <ChatCore />
-    </Suspense>
-  );
+  return <ChatCore />;
 }
 
 export const Route = createFileRoute("/_main/chat/$id")({
