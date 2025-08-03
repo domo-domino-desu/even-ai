@@ -7,6 +7,7 @@ import { analyzer, unstableRolldownAdapter } from "vite-bundle-analyzer";
 import tsconfigPaths from "vite-tsconfig-paths";
 
 export default defineConfig({
+  base: "/even-ai/",
   plugins: [
     tanstackRouter({
       target: "react",
