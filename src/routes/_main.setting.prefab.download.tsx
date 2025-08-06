@@ -50,7 +50,7 @@ function DownloadPrefab() {
 
     for (const pluginSpec of importedData.plugins) {
       const newPluginId = uuid();
-      await db.plugins.add({
+      await db.plugin_infos.add({
         id: newPluginId,
         name: pluginSpec.name,
         description: pluginSpec.description,

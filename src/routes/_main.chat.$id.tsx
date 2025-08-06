@@ -62,7 +62,7 @@ function Message({ message }: { message: Message }) {
     .with({ role: "user" }, (msg) => (
       <>
         <nav className={clsx("right-align")}>
-          <div className="datetime">{msg.datetime}</div>
+          <div className="datetime">{msg.createdAt}</div>
           <button
             className="transparent circle"
             onClick={() => deleteMessage(msg.id)}
@@ -80,7 +80,7 @@ function Message({ message }: { message: Message }) {
       <>
         <nav className={clsx("left-align")}>
           <i className="large">robot</i>
-          <div className="datetime">{msg.datetime}</div>
+          <div className="datetime">{msg.createdAt}</div>
           <button
             className="transparent circle"
             onClick={() => deleteMessage(msg.id)}

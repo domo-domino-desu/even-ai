@@ -15,7 +15,7 @@ export default createPlugin({
   outboundHooks: [],
   anyHooks: [
     {
-      event: "after-page-enter",
+      event: "onInit",
       order: 0,
       handler: async (chat, { content }) => {
         if (chat.messages.length === 0) {

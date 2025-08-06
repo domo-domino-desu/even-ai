@@ -6,7 +6,7 @@ import { db, type PluginHolder } from "~/utils/db";
 
 function PluginList() {
   const { type, id } = Route.useParams();
-  const plugins = useLiveQuery(() => db.plugins.toArray());
+  const plugins = useLiveQuery(() => db.plugin_infos.toArray());
   const parent = useLiveQuery<PluginHolder | undefined>(
     () =>
       match(type)

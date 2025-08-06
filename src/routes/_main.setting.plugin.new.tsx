@@ -18,7 +18,7 @@ function NewPlugin() {
         <PluginForm
           isNew
           onSave={async (pluginInfo) => {
-            await db.plugins.add({ ...pluginInfo, id: uuid() });
+            await db.plugin_infos.add({ ...pluginInfo, id: uuid() });
           }}
           afterSubmit={() => navigate({ to: "/setting/plugin" })}
         />

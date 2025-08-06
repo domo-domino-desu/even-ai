@@ -8,14 +8,14 @@ import { PATH_NAME } from "~/utils/ui-utils";
 
 function EditPluginConfig() {
   const { type, id, pluginId } = Route.useParams();
-  const plugin = useLiveQuery(() => db.plugins.get(pluginId), [pluginId]);
+  const plugin = useLiveQuery(() => db.plugin_infos.get(pluginId), [pluginId]);
   const parent = useLiveQuery<
     | { type: "host"; host: PluginHolder }
     | { type: "plugin"; plugin: PluginInfo<any> }
     | undefined
   >(async () => {
     if (type === "plugin") {
-      const got = await db.plugins.get(id);
+      const got = await db.plugin_infos.get(id);
       return got ? { type: "plugin", plugin: got } : undefined;
     }
     const host = await match(type)
@@ -37,7 +37,7 @@ function EditPluginConfig() {
 
   const onSave = (data: Record<string, any>) => {
     if (parent.type === "plugin") {
-      return db.plugins.update(pluginId, { globalConfig: data });
+      return db.plugin_infos.update(pluginId, { globalConfig: data });
     }
     const newPlugins = { ...parent.host.plugins, [pluginId]: data };
     return match(type)

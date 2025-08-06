@@ -7,7 +7,7 @@ import { db } from "~/utils/db";
 
 function EditPlugin() {
   const { id } = Route.useParams();
-  const plugin = useLiveQuery(() => db.plugins.get(id), [id]);
+  const plugin = useLiveQuery(() => db.plugin_infos.get(id), [id]);
 
   if (!plugin) {
     return "插件不存在";
@@ -33,7 +33,7 @@ function EditPlugin() {
         <PluginForm
           initialValues={plugin}
           onSave={async (pluginInfo) => {
-            await db.plugins.update(id, { ...pluginInfo });
+            await db.plugin_infos.update(id, { ...pluginInfo });
           }}
         />
       </main>

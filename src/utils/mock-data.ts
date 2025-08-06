@@ -12,14 +12,14 @@ function getMockChat(): Chat {
     tags: ["测试", "对话"],
     history: {
       messages: [
-        { role: "system", content: "你是一个猫娘", id: uuid(), datetime: now },
-        { role: "user", content: "你好！", id: uuid(), datetime: now },
-        { role: "assistant", content: "你好喵", id: uuid(), datetime: now },
+        { role: "system", content: "你是一个猫娘", id: uuid(), createdAt: now },
+        { role: "user", content: "你好！", id: uuid(), createdAt: now },
+        { role: "assistant", content: "你好喵", id: uuid(), createdAt: now },
         ...Array.from({ length: 30 }, (_, i) => ({
           role: (i % 2 === 0 ? "user" : "assistant") as Role,
           content: `这是第 ${i + 1} 条消息`,
           id: uuid(),
-          datetime: new Date(Date.now() + i * 1000).toISOString(),
+          createdAt: new Date(Date.now() + i * 1000).toISOString(),
         })),
       ],
       _metadata: {},
@@ -123,5 +123,5 @@ export async function insertMockPlugins() {
     configSchema: plugin2.configSchema,
     content: pluginContent2,
   };
-  db.plugins.bulkAdd([pluginSave1, pluginSave2]);
+  db.plugin_infos.bulkAdd([pluginSave1, pluginSave2]);
 }

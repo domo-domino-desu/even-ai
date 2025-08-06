@@ -1,6 +1,6 @@
 import Dexie, { type EntityTable, type Table } from "dexie";
 import { exportDB, importInto } from "dexie-export-import";
-import type { ChatHistory } from "~/utils/ai/chat";
+import type { Conversation } from "~/utils/ai/chat";
 import type { ConfigFromSchema, ConfigSchema } from "~/utils/ai/plugin";
 import type { ProviderType } from "~/utils/ai/provider";
 
@@ -42,7 +42,7 @@ export interface Prefab extends PluginHolder {
 export interface Chat extends PluginHolder {
   tags: string[];
   theme?: string;
-  history: ChatHistory;
+  history: Conversation;
   providerId?: Uuid;
   createdAt: string; // ISO date string
   updatedAt: string; // ISO date string
@@ -55,14 +55,14 @@ export interface GenericKV {
 }
 
 export const db = new Dexie("even_ai") as Dexie & {
-  plugins: EntityTable<PluginInfo<any>, "id">;
+  plugin_infos: EntityTable<PluginInfo<any>, "id">;
   ai_providers: EntityTable<Provider, "id">;
   prefabs: EntityTable<Prefab, "id">;
   chats: EntityTable<Chat, "id">;
   kv_storage: Table<GenericKV, [string, string]>;
 };
 db.version(1).stores({
-  plugins: "id, name, *tags",
+  plugin_infos: "id, name, *tags",
   prefabs: "id, name, *tags",
   ai_providers: "id, name, *tags",
   chats: "id, name, updatedAt, *tags",

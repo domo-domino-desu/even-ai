@@ -1,7 +1,7 @@
 import { merge } from "moderndash";
 import type { Chat, PluginInfo } from "~/utils/db";
 import { db } from "~/utils/db";
-import type { ChatHistory } from "./chat";
+import type { Conversation } from "./chat";
 import type { ConfigFromSchema, ConfigSchema, Plugin } from "./plugin";
 
 export async function loadPluginFromString<TSchema extends ConfigSchema>(
@@ -29,7 +29,7 @@ export async function getPluginsFromChat(
   // const providerPluginIds = Object.keys(provider?.plugins ?? {});
   // const pluginIds = Object.keys(chat.plugins);
   // if (pluginIds.length === 0) return [];
-  // return await db.plugins
+  // return await db.plugin_infos
   //   .where("id")
   //   .anyOf(pluginIds.concat(providerPluginIds))
   //   .toArray();
@@ -39,7 +39,7 @@ export async function getPluginsFromChat(
   const pluginIds = [...new Set([...providerPluginIds, ...chatPluginIds])];
   if (pluginIds.length === 0) return [];
 
-  const plugins = await db.plugins.where("id").anyOf(pluginIds).toArray();
+  const plugins = await db.plugin_infos.where("id").anyOf(pluginIds).toArray();
   return plugins.map((plugin) => {
     const chatConfig = chat.plugins[plugin.id] || {};
     const providerConfig = provider?.plugins[plugin.id] || {};
@@ -89,19 +89,19 @@ async function runHooks<T>(
   return result;
 }
 
-export async function runOutboundHooks(chat: Chat): Promise<ChatHistory> {
+export async function runOutboundHooks(chat: Chat): Promise<Conversation> {
   return runHooks(chat, "outboundHooks", () => true, chat.history);
 }
 
 export async function runInboundHooks(
   chat: Chat,
-  currentHistory: ChatHistory,
-): Promise<ChatHistory> {
+  currentHistory: Conversation,
+): Promise<Conversation> {
   return runHooks(chat, "inboundHooks", () => true, currentHistory);
 }
 
 export async function runAnyHooks(
-  event: "after-page-enter" | "after-receive" | "after-send",
+  event: "onInit" | "afterReceive" | "beforeSend",
   chat: Chat,
 ): Promise<Chat> {
   const newHistory = await runHooks(

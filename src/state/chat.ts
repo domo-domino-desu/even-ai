@@ -3,7 +3,7 @@ import { atom } from "jotai";
 import { v4 as uuidv4 } from "uuid";
 
 import toast from "react-hot-toast";
-import type { ChatHistory, Message } from "~/utils/ai/chat";
+import type { Conversation, Message } from "~/utils/ai/chat";
 import {
   runAnyHooks,
   runInboundHooks,
@@ -56,13 +56,13 @@ export const sendMessageAtom = atom(null, async (get, set) => {
     id: uuidv4(),
     role: "user",
     content: userInput,
-    datetime: new Date().toISOString(),
+    createdAt: new Date().toISOString(),
   };
   chat.history.messages.push(userMessage);
   await db.chats.update(chatId, { history: chat.history });
   set(rawChatAtom, { ...chat });
 
-  chat = await runAnyHooks("after-send", chat);
+  chat = await runAnyHooks("beforeSend", chat);
   await db.chats.update(chatId, { history: chat.history });
   set(rawChatAtom, { ...chat });
 
@@ -103,7 +103,7 @@ export const sendMessageAtom = atom(null, async (get, set) => {
     id: uuidv4(),
     role: "assistant",
     content: "",
-    datetime: new Date().toISOString(),
+    createdAt: new Date().toISOString(),
   };
   chat.history.messages.push(assistantMessage);
   set(rawChatAtom, { ...chat }); // Show empty bubble
@@ -134,7 +134,7 @@ export const sendMessageAtom = atom(null, async (get, set) => {
     assistantMessage.content += "\n\n(interrupted)";
   }
 
-  let finalHistory: ChatHistory = {
+  let finalHistory: Conversation = {
     ...outboundChat,
     messages: [...outboundChat.messages, assistantMessage],
   };
@@ -144,7 +144,7 @@ export const sendMessageAtom = atom(null, async (get, set) => {
   await db.chats.update(chatId, { history: chat.history });
   set(rawChatAtom, { ...chat });
 
-  chat = await runAnyHooks("after-receive", chat);
+  chat = await runAnyHooks("afterReceive", chat);
   await db.chats.update(chatId, { history: chat.history });
   set(rawChatAtom, { ...chat });
 
@@ -177,7 +177,7 @@ export const initChatSessionAtom = atom(null, async (get, set) => {
   set(rawChatAtom, chat);
   set(isSendingAtom, false);
 
-  chat = await runAnyHooks("after-page-enter", chat);
+  chat = await runAnyHooks("onInit", chat);
   console.log("Chat initialized:", chat);
   await db.chats.update(chatId, { history: chat.history });
   set(rawChatAtom, { ...chat });

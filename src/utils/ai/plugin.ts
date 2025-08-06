@@ -1,6 +1,6 @@
 import React from "react";
 
-import type { ChatHistory } from "./chat";
+import type { Conversation } from "./chat";
 
 interface StringConfigItem {
   type: "string";
@@ -25,6 +25,12 @@ export type ConfigItem =
   | NumberConfigItem
   | BooleanConfigItem;
 export type ConfigSchema = Record<string, ConfigItem>;
+export type EventName = "onInit" | "beforeSend" | "afterReceive";
+export type HandlerFn<TSchema extends ConfigSchema> = (
+  chat: Conversation,
+  config: ConfigFromSchema<TSchema>,
+  capabilities: Record<any, (...args: any) => any>,
+) => Promise<Conversation>;
 
 export type ConfigFromSchema<TSchema extends ConfigSchema> = {
   -readonly [K in keyof TSchema]: TSchema[K] extends { type: "string" }
@@ -57,11 +63,7 @@ export interface Plugin<TSchema extends ConfigSchema> {
      * @param capabilities An object containing capabilities that the extension can use.
      * @return The modified chat object.
      */
-    handler: (
-      chat: ChatHistory,
-      config: ConfigFromSchema<TSchema>,
-      capabilities: Record<any, (...args: any) => any>,
-    ) => Promise<ChatHistory>;
+    handler: HandlerFn<TSchema>;
   }[];
   /**
    * Allow extension to modify what will be sent to the AI provider.
@@ -75,17 +77,13 @@ export interface Plugin<TSchema extends ConfigSchema> {
      * @param capabilities An object containing capabilities that the extension can use.
      * @return The modified chat object.
      */
-    handler: (
-      chat: ChatHistory,
-      config: ConfigFromSchema<TSchema>,
-      capabilities: Record<any, (...args: any) => any>,
-    ) => Promise<ChatHistory>;
+    handler: HandlerFn<TSchema>;
   }[];
   /**
    * Allow extension to modify the source-of-truth chat history.
    */
   anyHooks?: {
-    event: "after-page-enter" | "after-receive" | "after-send";
+    event: EventName;
     /**
      * This handler will be called when the specified event occurs. The result will be used as the new source-of-truth chat history.
      * @param chat The source-of-truth chat history.
@@ -93,11 +91,7 @@ export interface Plugin<TSchema extends ConfigSchema> {
      * @param capabilities An object containing capabilities that the extension can use.
      * @return The modified chat object.
      */
-    handler: (
-      chat: ChatHistory,
-      config: ConfigFromSchema<TSchema>,
-      capabilities: Record<any, (...args: any) => any>,
-    ) => Promise<ChatHistory>;
+    handler: HandlerFn<TSchema>;
   }[];
   /**
    * Allow extension to add additional components to the chat UI.

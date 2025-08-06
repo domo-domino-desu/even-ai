@@ -9,7 +9,7 @@ import { insertMockPlugins } from "~/utils/mock-data";
 import { ICON_NAME } from "~/utils/ui-utils";
 
 function deletePlugin(pluginId: string) {
-  db.plugins.delete(pluginId).catch((error) => {
+  db.plugin_infos.delete(pluginId).catch((error) => {
     toast.error("删除插件失败");
     console.error("Failed to delete plugin:", error);
   });
@@ -66,7 +66,7 @@ function EmptyCard() {
 
 export function PluginList() {
   const [parent] = useAutoAnimate<HTMLElement>();
-  const plugins = useLiveQuery(() => db.plugins.toArray());
+  const plugins = useLiveQuery(() => db.plugin_infos.toArray());
 
   return (
     <>
